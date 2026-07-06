@@ -1,3 +1,4 @@
+import Star from '@/assets/expo.icon/Assets/star.svg';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { addToCart } from "@/data/repositories/firestore.repository";
@@ -5,7 +6,7 @@ import { ProductEntities } from '@/domain/entities/product_entities';
 import { useAuthStore } from '@/stores/authStore';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Image, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { formatCurrency } from 'react-native-format-currency';
 
 type ProductCardProps = ProductEntities & {
@@ -50,6 +51,7 @@ export default function ProductCard({ onIncrease, onDecrease, ...product }: Prod
                 },
             ]}>
             <ThemedView style={cardStyle.ProductCard}>
+                <Star style={{ top: 206, left: 98 }} />
                 <View style={cardStyle.CardImageWrapper}>
                     <Image source={{ uri: product.image }} resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: 10 }} />
                 </View>
@@ -58,13 +60,9 @@ export default function ProductCard({ onIncrease, onDecrease, ...product }: Prod
                 </ThemedView>
                 <ThemedView style={cardStyle.CardFooter}>
                     <ThemedText style={cardStyle.ProductPrice}>{withSymbol}</ThemedText>
-                    <TouchableOpacity style={cardStyle.AddButton} onPress={() => handleAddToCart} disabled={adding}>
-                        {adding ? (
-                            <ActivityIndicator size="small" color="#61AD4E" />
-                        ) : (
-                            <ThemedText style={cardStyle.AddButtonText}>+</ThemedText>
-                        )}
-                    </TouchableOpacity>
+                    <ThemedView style={{ flexDirection: "row", position: 'relative' }}>
+                        <ThemedText style={cardStyle.ProductPrice}>{product.rating.rate}</ThemedText>
+                    </ThemedView>
                 </ThemedView>
             </ThemedView>
         </Pressable>

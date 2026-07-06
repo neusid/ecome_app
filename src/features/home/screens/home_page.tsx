@@ -19,7 +19,7 @@ export default function HomePage() {
 
     return (
         <View style={{ flex: 1 }}>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <ThemedView style={styles.Body}>
                     <Image source={require('@/assets/expo.icon/Assets/card.png')} style={{ width: '100%', height: 200, marginTop: 20 }} />
                     <ThemedView style={styles.WrapInputSearch}>
@@ -73,7 +73,7 @@ export default function HomePage() {
 
                             <ScrollView horizontal={true} contentContainerStyle={{
                                 padding: 10,
-                            }} >
+                            }} showsHorizontalScrollIndicator={false}>
                                 <ThemedView style={styles.FlashSaleRow}>
                                     {productListAxios!.length > 0 ? productListAxios?.map((data) => (
                                         <ProductCard
