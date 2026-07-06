@@ -11,11 +11,11 @@ import { Shimmer, ShimmerProvider } from 'react-native-fast-shimmer';
 import { Easing } from 'react-native-reanimated';
 import { ThemedText } from "../../../components/themed-text";
 import { ThemedView } from "../../../components/themed-view";
-import { useHomePage } from "../hooks/useHomePage";
+import { useHomePage } from "../hooks/use_home_page";
 
 export default function HomePage() {
 
-    const { productListAxios, handleTestAxios } = useHomePage();
+    const { productListAxios, handleTestAxios, handleLocalIncrease } = useHomePage();
 
     return (
         <View style={{ flex: 1 }}>
@@ -85,6 +85,7 @@ export default function HomePage() {
                                             category={data.category}
                                             image={data.image}
                                             rating={data.rating}
+                                            onIncrease={handleLocalIncrease}
                                         />
                                     )) : <ShimmerProvider duration={1500}>
                                         <ThemedView style={{ flexDirection: "row", flexWrap: "wrap", gap: 16 }}>
@@ -99,6 +100,8 @@ export default function HomePage() {
                                                         category={data.category}
                                                         image={data.image}
                                                         rating={data.rating}
+                                                        onIncrease={handleLocalIncrease}
+
                                                     />
                                                 ))
                                             ) : (

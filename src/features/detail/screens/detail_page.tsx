@@ -1,15 +1,17 @@
 import BottomChip from "@/assets/expo.icon/Assets/bottom-chip.svg";
+import Checkout from "@/assets/expo.icon/Assets/checkout.svg";
 import PromoChip from "@/assets/expo.icon/Assets/promo-chip.svg";
 import Star from "@/assets/expo.icon/Assets/star.svg";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { addToCart } from "@/data/repositories/firestore.repository";
+import { router } from "expo-router";
 import { ActivityIndicator, Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import useDetailPage from "../hooks/useDetailPage";
+import useDetailPage from "../hooks/use_detail_page";
 
 export default function DetailPage() {
 
-    const { Uid, loading, adding, withSymbol, setAdding, DetailProduct } = useDetailPage();
+    const { Uid, loading, adding, withSymbol, setAdding, DetailProduct, Count, setCount } = useDetailPage();
     if (loading) {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -62,6 +64,7 @@ export default function DetailPage() {
                         setAdding(true);
                         await addToCart(DetailProduct!, Uid!);
                         setAdding(false);
+                        setCount(Count + 1);
                     }}
                 >
                     {adding ? (
@@ -73,6 +76,15 @@ export default function DetailPage() {
                     )}
                 </TouchableOpacity>
             </ThemedView>
+            <TouchableOpacity
+                style={styleDetailPage.fab}
+                onPress={() => router.push('/cart')}
+            >
+                <ThemedView style={styleDetailPage.fabNotification}>
+                    <ThemedText style={styleDetailPage.fabNotificationText}>{Count}</ThemedText>
+                </ThemedView>
+                <Checkout />
+            </TouchableOpacity>
         </View>
     )
 }
@@ -110,5 +122,44 @@ const styleDetailPage = StyleSheet.create({
         width: '100%',
         height: '68%',
         borderRadius: 20,
-    }
+    },
+    fabNotificationText: {
+        fontSize: 12,
+        color: '#fff'
+    },
+    fabNotification: {
+        width: 25,
+        height: 25,
+        backgroundColor: '#FF0000',
+        borderRadius: 20,
+        bottom: 45,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        left: 40
+    },
+    fab: {
+        position: 'absolute',
+
+        right: 20,
+        bottom: 150,
+        width: 56,
+        height: 56,
+
+        backgroundColor: '#FDB447',
+        borderRadius: 16,
+
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        elevation: 8,
+
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+    },
 })

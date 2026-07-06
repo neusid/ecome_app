@@ -6,11 +6,11 @@ import { ThemedView } from "@/components/themed-view";
 import CartComponent from "@/features/cart/components/cart-component";
 
 import { ScrollView, TouchableOpacity } from "react-native";
-import useCartPage from "../hooks/useCartPage";
+import useCartPage from "../hooks/use_cart_page";
 
 export default function CartPage() {
 
-    const { Uid, fetchCart, CartList, totalPrice, handleCheckout, TransformPrice } = useCartPage();
+    const { Uid, CartList, totalPrice, handleCheckout, handleLocalIncrease, handleLocalDecrease, TransformPrice } = useCartPage();
 
     return (
         <ThemedView
@@ -51,7 +51,8 @@ export default function CartPage() {
                                         image={cart.product.image}
                                         rating={cart.product.rating}
                                         quantity={cart.quantity}
-                                        onUpdate={() => Uid && fetchCart(Uid)}
+                                        onIncrease={handleLocalIncrease}
+                                        onDecrease={handleLocalDecrease}
                                     />
                                 ))
                             )

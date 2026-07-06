@@ -1,5 +1,5 @@
 import { ProductCartEntities, ProductEntities } from "@/domain/entities/product_entities";
-import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where, } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where, writeBatch, } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 
 export interface Product {
@@ -115,4 +115,22 @@ export const deleteCart = async (id: string, quantityOld: number) => {
     await updateDoc(cartRef, {
         quantity: quantityOld - 1,
     });
+};
+
+export const batchUpdateCart = async (changes: { id: string; quantity: number }[]) => {
+    if (changes.length === 0) return;
+
+    const batch = writeBatch(db);
+
+    for (const { id, quantity } of changes) {
+        const ref = doc(db, "carts", id);
+
+        if (quantity <= 0) {
+            batch.delete(ref);
+        } else {
+            batch.update(ref, { quantity });
+        }
+    }
+
+    await batch.commit();
 };

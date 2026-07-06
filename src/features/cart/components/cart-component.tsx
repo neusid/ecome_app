@@ -1,32 +1,10 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import {
-    deleteCart,
-    increaseCart,
-} from "@/data/repositories/firestore.repository";
+import type { ProductCardComponentProps } from "@/domain/entities/product_card_entities";
 import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import { formatCurrency } from "react-native-format-currency";
 
-type ProductCardComponentProps = {
-    id: string;
-    title: string;
-    price: number;
-    description: string;
-    category: string;
-    image: string;
-    rating: Rating;
-    quantity: number,
-    onUpdate: () => void;
-};
-
-type Rating = {
-    rate: number;
-    count: number;
-}
-
-export default function CartComponent(
-    product: ProductCardComponentProps
-) {
+export default function CartComponent(product: ProductCardComponentProps) {
     const TransformPrice = (): string => {
         const roundedPrice = Math.round(product.price * 100) / 100;
 
@@ -36,16 +14,6 @@ export default function CartComponent(
         });
 
         return withSymbol;
-    };
-
-    const handleDecrease = async () => {
-        await deleteCart(product.id, product.quantity);
-        product.onUpdate();
-    };
-
-    const handleIncrease = async () => {
-        await increaseCart(product.id, product.quantity);
-        product.onUpdate();
     };
 
     return (
@@ -80,7 +48,7 @@ export default function CartComponent(
                     <ThemedView style={styleCart.quantityContainer}>
                         <TouchableOpacity
                             style={styleCart.AddButton}
-                            onPress={handleDecrease}
+                            onPress={() => product.onDecrease(product.id)}
                         >
                             <ThemedText style={styleCart.AddButtonText}>
                                 -
@@ -93,7 +61,7 @@ export default function CartComponent(
 
                         <TouchableOpacity
                             style={styleCart.AddButton}
-                            onPress={handleIncrease}
+                            onPress={() => product.onIncrease(product.id)}
                         >
                             <ThemedText style={styleCart.AddButtonText}>
                                 +

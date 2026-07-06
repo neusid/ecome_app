@@ -4,13 +4,18 @@ import { addToCart } from "@/data/repositories/firestore.repository";
 import { ProductEntities } from '@/domain/entities/product_entities';
 import { useAuthStore } from '@/stores/authStore';
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { ActivityIndicator, Image, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { formatCurrency } from 'react-native-format-currency';
-import { useState } from 'react';
 
-export default function ProductCard(product: ProductEntities) {
+type ProductCardProps = ProductEntities & {
+    onIncrease?: (id: string) => void;
+    onDecrease?: (id: string) => void;
+};
 
-    const [withSymbol, withoutSymbol, symbol] = formatCurrency({
+export default function ProductCard({ onIncrease, onDecrease, ...product }: ProductCardProps) {
+
+    const [withSymbol] = formatCurrency({
         amount: product.price,
         code: "USD",
     });
@@ -24,6 +29,7 @@ export default function ProductCard(product: ProductEntities) {
         await addToCart(product, Uid);
         setAdding(false);
     };
+
 
     return (
         <Pressable
@@ -52,7 +58,7 @@ export default function ProductCard(product: ProductEntities) {
                 </ThemedView>
                 <ThemedView style={cardStyle.CardFooter}>
                     <ThemedText style={cardStyle.ProductPrice}>{withSymbol}</ThemedText>
-                    <TouchableOpacity style={cardStyle.AddButton} onPress={handleAddToCart} disabled={adding}>
+                    <TouchableOpacity style={cardStyle.AddButton} onPress={() => handleAddToCart} disabled={adding}>
                         {adding ? (
                             <ActivityIndicator size="small" color="#61AD4E" />
                         ) : (

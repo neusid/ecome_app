@@ -17,6 +17,7 @@ function useDetailPage() {
         amount: Number(DetailProduct?.price),
         code: "USD",
     });
+    const [Count, setCount] = useState<number>(0);
 
     useEffect(() => {
         handleSingleProductAxios();
@@ -37,7 +38,9 @@ function useDetailPage() {
         adding,
         withSymbol,
         setAdding,
-        DetailProduct
+        DetailProduct,
+        Count,
+        setCount
     }
 }
 

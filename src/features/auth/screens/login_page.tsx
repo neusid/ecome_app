@@ -11,10 +11,10 @@ import { useReducer, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import { ValidateReducer, initialState } from '../validations/validate';
 
+import { getData } from '@/data/repositories/firestore.repository';
+import { getFirebaseErrorMessage, loginUseCase } from '@/domain/usecases/auth/login_usecase';
 import { useAuthStore } from '@/stores/authStore';
 import { router } from 'expo-router';
-import { getFirebaseErrorMessage, loginUseCase } from '@/domain/usecases/auth/LoginUseCase';
-import { getData } from '@/data/repositories/firestore.repository';
 
 export default function LoginPage() {
     const [checkBox, setCheckBox] = useState<boolean>(true);
