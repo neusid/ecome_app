@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { Product, getData } from "@/data/repositories/firestore.repository";
-import { ProductRepositoriesImpl } from "@/data/repositories/product/product_repositories_impl";
+import { Product } from "@/data/repositories/firestore.repository";
 import { ProductEntities } from "@/domain/entities/product_entities";
+import {
+  getApiProductsUseCase,
+  getFirestoreProductsUseCase,
+} from "@/domain/usecases/product/GetProductsUseCase";
 
 export function useHomePage() {
   const [productList, setProductList] = useState<Product[]>([]);
@@ -10,22 +13,16 @@ export function useHomePage() {
   );
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const data = await getData();
-      setProductList(data);
-    };
-
-    fetchProducts();
+    getFirestoreProductsUseCase().then(setProductList);
   }, []);
 
   useEffect(() => {
-    handleTestAxios();
+    getApiProductsUseCase().then(setProductListAxios);
   }, []);
 
   const handleTestAxios = async () => {
-    const repository = new ProductRepositoriesImpl();
-    const response = await repository.fetchData();
-    setProductListAxios(response);
+    const data = await getApiProductsUseCase();
+    setProductListAxios(data);
   };
 
   return {

@@ -3,7 +3,7 @@ import Ticket from "@/assets/expo.icon/Assets/ticket.svg";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 
-import CartComponent from "@/features/cart/component/cart-component";
+import CartComponent from "@/features/cart/components/cart-component";
 
 import { ScrollView, TouchableOpacity } from "react-native";
 import useCartPage from "../hooks/useCartPage";

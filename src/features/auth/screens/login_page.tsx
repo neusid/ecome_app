@@ -11,36 +11,10 @@ import { useReducer, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import { ValidateReducer, initialState } from '../validations/validate';
 
-import { getData } from '@/data/repositories/firestore.repository';
 import { useAuthStore } from '@/stores/authStore';
 import { router } from 'expo-router';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../../../../firebaseConfig';
-
-const InitialValue = {
-    email: '',
-    password: ''
-}
-
-function getFirebaseErrorMessage(code: string) {
-    switch (code) {
-        case 'auth/user-not-found':
-            return 'Akun tidak ditemukan. Periksa kembali email Anda.';
-        case 'auth/wrong-password':
-            return 'Password salah. Silakan coba lagi.';
-        case 'auth/invalid-credential':
-            return 'Email atau password salah.';
-        case 'auth/invalid-email':
-            return 'Format email tidak valid.';
-        case 'auth/too-many-requests':
-            return 'Terlalu banyak percobaan. Silakan coba beberapa saat lagi.';
-        case 'auth/network-request-failed':
-            return 'Koneksi internet bermasalah. Periksa kembali jaringan Anda.';
-        default:
-            return 'Terjadi kesalahan. Silakan coba lagi.';
-    }
-}
-
+import { getFirebaseErrorMessage, loginUseCase } from '@/domain/usecases/auth/LoginUseCase';
+import { getData } from '@/data/repositories/firestore.repository';
 
 export default function LoginPage() {
     const [checkBox, setCheckBox] = useState<boolean>(true);
@@ -51,16 +25,9 @@ export default function LoginPage() {
         if (loading) return;
         try {
             setLoading(true);
-            const result = await signInWithEmailAndPassword(
-                auth,
-                validate.email,
-                validate.password
-            );
+            const result = await loginUseCase(validate.email, validate.password);
 
-            console.log("LOGIN SUCCESS:", result.user.email);
-            console.log(`UID Response: ${result.user.uid}`)
-            useAuthStore.getState().setUid(result.user?.uid ?? null);
-            console.log(`UID Persist: ${useAuthStore.getState().uid ?? null}`)
+            useAuthStore.getState().setUid(result.uid);
             router.replace("/home")
 
         } catch (error: any) {
@@ -75,7 +42,7 @@ export default function LoginPage() {
         try {
             await getData();
         } catch (e: any) {
-            console.log("Login error:", e.message);
+            console.log("Login error:", (e as Error).message);
         }
     }
 
