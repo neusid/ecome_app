@@ -5,13 +5,18 @@ import Star from "@/assets/expo.icon/Assets/star.svg";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { addToCart } from "@/data/repositories/firestore.repository";
+import { useCartStore } from "@/stores/cartStore";
 import { router } from "expo-router";
 import { ActivityIndicator, Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import useDetailPage from "../hooks/use_detail_page";
 
 export default function DetailPage() {
 
-    const { Uid, loading, adding, withSymbol, setAdding, DetailProduct, Count, setCount } = useDetailPage();
+    const { Uid, loading, adding, withSymbol, setAdding, DetailProduct } = useDetailPage();
+
+    const count = useCartStore((s) => s.count);
+    const setCount = useCartStore((s) => s.setCount);
+
     if (loading) {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -64,7 +69,7 @@ export default function DetailPage() {
                         setAdding(true);
                         await addToCart(DetailProduct!, Uid!);
                         setAdding(false);
-                        setCount(Count + 1);
+                        setCount(count + 1);
                     }}
                 >
                     {adding ? (
@@ -81,7 +86,7 @@ export default function DetailPage() {
                 onPress={() => router.push('/cart')}
             >
                 <ThemedView style={styleDetailPage.fabNotification}>
-                    <ThemedText style={styleDetailPage.fabNotificationText}>{Count}</ThemedText>
+                    <ThemedText style={styleDetailPage.fabNotificationText}>{count}</ThemedText>
                 </ThemedView>
                 <Checkout />
             </TouchableOpacity>

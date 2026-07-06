@@ -5,6 +5,7 @@ import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import { formatCurrency } from "react-native-format-currency";
 
 export default function CartComponent(product: ProductCardComponentProps) {
+
     const TransformPrice = (): string => {
         const roundedPrice = Math.round(product.price * 100) / 100;
 

@@ -69,6 +69,24 @@ export const GetCart = async (userId: string): Promise<ProductCartEntities[]> =>
     }));
 };
 
+export const GetSingleCart = async (userId: string, productId: string): Promise<ProductCartEntities | undefined> => {
+    const q = query(
+        collection(db, "carts"),
+        where("id_user", "==", userId),
+        where("product.id", "==", Number(productId))
+    );
+
+    const snapshot = await getDocs(q);
+
+    const firstDoc = snapshot.docs[0]
+    if (!firstDoc) return undefined;
+
+    return {
+        id: firstDoc.id,
+        ...(firstDoc.data() as Omit<ProductCartEntities, "id">)
+    };
+}
+
 export const increaseCart = async (id: string, quantityOld: number) => {
     const cartRef = doc(db, "carts", id);
 

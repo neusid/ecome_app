@@ -1,6 +1,7 @@
 import { CheckoutCart, GetCart, batchUpdateCart } from "@/data/repositories/firestore.repository";
 import { ProductCartEntities } from "@/domain/entities/product_entities";
 import { useAuthStore } from "@/stores/authStore";
+import { useCartStore } from "@/stores/cartStore";
 import debounce from "lodash.debounce";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { formatCurrency } from "react-native-format-currency";
@@ -10,6 +11,10 @@ function useCartPage() {
 
     const [CartList, setCartList] = useState<ProductCartEntities[]>([]);
     const pendingUpdates = useRef<Map<string, number>>(new Map());
+
+    const setCount = useCartStore((s) => s.setCount);
+    const count = useCartStore((s) => s.count);
+
 
     const Uid = useAuthStore((s) => s.uid ?? null);
 
@@ -44,6 +49,7 @@ function useCartPage() {
 
             pendingUpdates.current.forEach((quantity, id) => {
                 changes.push({ id, quantity });
+                setCount(quantity);
             });
             pendingUpdates.current.clear();
 
