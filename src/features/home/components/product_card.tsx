@@ -1,4 +1,4 @@
-import Star from '@/assets/expo.icon/Assets/star.svg';
+import Star from '@/assets/expo.icon/Assets/star-svg.svg';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { addToCart } from "@/data/repositories/firestore.repository";
@@ -51,7 +51,6 @@ export default function ProductCard({ onIncrease, onDecrease, ...product }: Prod
                 },
             ]}>
             <ThemedView style={cardStyle.ProductCard}>
-                <Star style={{ top: 206, left: 98 }} />
                 <View style={cardStyle.CardImageWrapper}>
                     <Image source={{ uri: product.image }} resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: 10 }} />
                 </View>
@@ -61,6 +60,7 @@ export default function ProductCard({ onIncrease, onDecrease, ...product }: Prod
                 <ThemedView style={cardStyle.CardFooter}>
                     <ThemedText style={cardStyle.ProductPrice}>{withSymbol}</ThemedText>
                     <ThemedView style={{ flexDirection: "row", position: 'relative' }}>
+                        <Star width={10} height={10} style={cardStyle.ProductIcon} />
                         <ThemedText style={cardStyle.ProductPrice}>{product.rating.rate}</ThemedText>
                     </ThemedView>
                 </ThemedView>
@@ -113,6 +113,13 @@ const cardStyle = StyleSheet.create({
         marginTop: 20,
         flexDirection: 'row',
         justifyContent: 'space-between'
+    },
+    ProductIcon: {
+        fontSize: 14,
+        fontWeight: '400',
+        color: '#1C2229',
+        top: -113,
+        right: 5,
     },
     ProductPrice: {
         fontSize: 14,
