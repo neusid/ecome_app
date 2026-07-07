@@ -11,9 +11,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 export function useHomePage() {
   const [productList, setProductList] = useState<Product[]>([]);
   const [productListAxios, setProductListAxios] = useState<ProductEntities[]>([]);
-  const pendingUpdates = useRef<Map<string, number>>(new Map());
   const Uid = useAuthStore((s) => s.uid ?? null);
   const [CartList, setCartList] = useState<ProductCartEntities[]>([]);
+  const pendingUpdates = useRef<Map<string, number>>(new Map());
 
   const syncToFirestore = useMemo(
     () => debounce(async () => {
