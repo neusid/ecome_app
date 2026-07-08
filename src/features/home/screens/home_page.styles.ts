@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
     },
     Body: {
         width: '100%',
-        height: 850,
     },
     StackTop: {
         marginHorizontal: 16,
@@ -28,7 +27,7 @@ export const styles = StyleSheet.create({
     cardImage: {
         width: '100%',
         height: 200,
-        marginTop: 20,
+        marginTop: 70,
     },
     WrapInputSearch: {
         justifyContent: 'center',
@@ -52,6 +51,7 @@ export const styles = StyleSheet.create({
     },
     CategorySection: {
         marginHorizontal: 16,
+        marginBottom: 80,
         marginTop: -45
     },
     CategoryRow: {
@@ -85,6 +85,7 @@ export const styles = StyleSheet.create({
     },
     FlashSaleRow: {
         flexDirection: 'row',
+        flexWrap: 'wrap',
         justifyContent: 'flex-start',
         marginTop: 8,
         gap: 16
@@ -106,10 +107,9 @@ export const styles = StyleSheet.create({
     },
     highlightFlashSale: {
         width: '100%',
-        height: 292,
         justifyContent: 'center',
         alignContent: 'center',
-        top: 25,
+        bottom: 60,
     },
     fab: {
         position: 'absolute',

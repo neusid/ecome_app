@@ -5,17 +5,15 @@ import IconWrapper3 from "@/assets/expo.icon/Assets/icon-wrapper-3.svg";
 import IconWrapper4 from "@/assets/expo.icon/Assets/icon-wrapper-4.svg";
 import IconWrapper5 from "@/assets/expo.icon/Assets/icon-wrapper-5.svg";
 import IconWrapper from "@/assets/expo.icon/Assets/icon-wrapper.svg";
-import ProductCard from "@/features/home/components/product_card";
 import { router } from "expo-router";
 import { Image, Pressable, ScrollView, TextInput, TouchableOpacity, View } from "react-native";
-import { Shimmer, ShimmerProvider } from 'react-native-fast-shimmer';
-import { Easing } from 'react-native-reanimated';
 import { ThemedText } from "../../../components/themed-text";
 import { ThemedView } from "../../../components/themed-view";
+import ProductCard from "../components/product_card";
 import useHomePage from "../hooks/use_home_page";
 import { styles } from "./home_page.styles";
 
-const { flashSaleScroll, shimmerContainer, shimmerItem, cardImage } = styles;
+const { cardImage } = styles;
 
 export default function HomePage() {
 
@@ -70,59 +68,27 @@ export default function HomePage() {
                         <ThemedView style={styles.FlashSaleSection}>
                             <ThemedView style={styles.FlashSaleHeader}>
                                 <ThemedText style={styles.SectionTitle}>Flash sale 🔥</ThemedText>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => router.push({ pathname: '/all_product' })}>
                                     <ThemedText style={styles.SectionTitle}>View All</ThemedText>
                                 </TouchableOpacity>
                             </ThemedView>
-
-                            <ScrollView horizontal={true} contentContainerStyle={flashSaleScroll} showsHorizontalScrollIndicator={false}>
-                                <ThemedView style={styles.FlashSaleRow}>
-                                    {productListAxios!.length > 0 ? productListAxios?.map((data) => (
-                                        <ProductCard
-                                            key={data.id}
-                                            id={data.id}
-                                            title={data.title}
-                                            price={data.price}
-                                            description={data.description}
-                                            category={data.category}
-                                            image={data.image}
-                                            rating={data.rating}
-                                            onIncrease={handleLocalIncrease}
-                                        />
-                                    )) : <ShimmerProvider duration={1500}>
-                                        <ThemedView style={shimmerContainer}>
-                                            {productListAxios.length > 0 ? (
-                                                productListAxios.map((data) => (
-                                                    <ProductCard
-                                                        key={data.id}
-                                                        id={data.id}
-                                                        title={data.title}
-                                                        price={data.price}
-                                                        description={data.description}
-                                                        category={data.category}
-                                                        image={data.image}
-                                                        rating={data.rating}
-                                                        onIncrease={handleLocalIncrease}
-
-                                                    />
-                                                ))
-                                            ) : (
-                                                Array.from({ length: 6 }).map((_, index) => (
-                                                    <Shimmer
-                                                        key={index}
-                                                        style={shimmerItem}
-                                                        easing={Easing.linear}
-                                                        speed={0.5}
-                                                    />
-                                                ))
-                                            )}
-                                        </ThemedView>
-                                    </ShimmerProvider>}
-                                </ThemedView>
-                            </ScrollView>
-                        </ThemedView >
+                            <ThemedView style={styles.FlashSaleRow}>
+                                {productListAxios?.map((data) => (
+                                    <ProductCard
+                                        key={data.id}
+                                        id={data.id}
+                                        title={data.title}
+                                        price={data.price}
+                                        description={data.description}
+                                        category={data.category}
+                                        image={data.image}
+                                        rating={data.rating}
+                                    />
+                                ))}
+                            </ThemedView>
+                        </ThemedView>
                     </ThemedView>
-                </ThemedView >
+                </ThemedView>
             </ScrollView>
 
             <TouchableOpacity
