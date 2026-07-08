@@ -2,8 +2,9 @@ import { CheckoutCart, GetCart, batchUpdateCart } from "@/data/repositories/fire
 import { ProductCartEntities } from "@/domain/entities/product_entities";
 import { useAuthStore } from "@/stores/authStore";
 import { useCartStore } from "@/stores/cartStore";
+import { useFocusEffect } from "expo-router/react-navigation";
 import debounce from "lodash.debounce";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { formatCurrency } from "react-native-format-currency";
 
 
@@ -57,10 +58,14 @@ function useCartPage() {
         []
     );
 
-    useEffect(() => {
-        if (!Uid) return;
-        fetchCart(Uid);
-    }, [Uid]);
+    // back
+    useFocusEffect(
+        useCallback(() => {
+            if (!Uid) return;
+            const timer = setTimeout(() => fetchCart(Uid), 0);
+            return () => clearTimeout(timer);
+        }, [Uid])
+    );
 
     useEffect(() => {
         return () => {

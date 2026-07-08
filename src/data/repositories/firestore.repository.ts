@@ -1,5 +1,6 @@
+import { Orders } from "@/domain/entities/orders_entities";
 import { ProductCartEntities, ProductEntities } from "@/domain/entities/product_entities";
-import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where, writeBatch, } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where, writeBatch, } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 
 export interface Product {
@@ -68,6 +69,21 @@ export const GetCart = async (userId: string): Promise<ProductCartEntities[]> =>
         ...(doc.data() as Omit<ProductCartEntities, "id">),
     }));
 };
+
+export const GetOrder = async (userId: string): Promise<Orders[]> => {
+    const q = query(
+        collection(db, "orders"),
+        where("id_user", "==", userId)
+    );
+
+    const snapshot = await getDocs(q);
+
+    return snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Orders, "id">)
+    }));
+}
+
 
 export const GetSingleCart = async (userId: string, productId: string): Promise<ProductCartEntities | undefined> => {
     const q = query(
@@ -151,4 +167,21 @@ export const batchUpdateCart = async (changes: { id: string; quantity: number }[
     }
 
     await batch.commit();
+};
+
+export const GetSingleOrder = async (
+    orderId: string
+): Promise<Orders | null> => {
+    const docRef = doc(db, "orders", orderId);
+    const docSnap = await getDoc(docRef);
+
+    console.log(docSnap.data())
+    if (!docSnap.exists()) return null;
+
+    console.log(docSnap.data())
+
+    return {
+        id: docSnap.id,
+        ...(docSnap.data() as Omit<Orders, "id">),
+    };
 };

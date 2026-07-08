@@ -1,170 +1,123 @@
+import Arrow from "@/assets/expo.icon/Assets/arrow.svg";
 import BottomChip from "@/assets/expo.icon/Assets/bottom-chip.svg";
 import Checkout from "@/assets/expo.icon/Assets/checkout.svg";
+import HistorySvg from "@/assets/expo.icon/Assets/history.svg";
 import PromoChip from "@/assets/expo.icon/Assets/promo-chip.svg";
 import Star from "@/assets/expo.icon/Assets/star.svg";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { addToCart } from "@/data/repositories/firestore.repository";
 import { useCartStore } from "@/stores/cartStore";
+import { useCheckCart } from "@/stores/checkCartStore";
 import { router } from "expo-router";
-import { ActivityIndicator, Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, ScrollView, TouchableOpacity, View } from "react-native";
 import useDetailPage from "../hooks/use_detail_page";
+import { styles } from "./detail_page.styles";
 
 export default function DetailPage() {
 
-    const { Uid, loading, adding, withSymbol, setAdding, DetailProduct } = useDetailPage();
+    const { Uid, loading, adding, withSymbol, setAdding, DetailProduct, checkSingleProduct } = useDetailPage();
 
     const count = useCartStore((s) => s.count);
     const setCount = useCartStore((s) => s.setCount);
+    const check = useCheckCart((s) => s.check);
 
     if (loading) {
         return (
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color="#61AD4E" />
             </View>
         );
     }
 
     return (
-        <View style={{ flex: 1 }}>
-            <ScrollView contentContainerStyle={{ paddingBottom: 50, flexGrow: 1, }} showsVerticalScrollIndicator={false} >
-                <ThemedView style={styleDetailPage.body}>
-                    <ThemedView style={styleDetailPage.container}>
-                        <ThemedView style={styleDetailPage.subContainer}>
-                            <Image source={{ uri: DetailProduct?.image }} style={styleDetailPage.image} />
-                            <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-                                <ThemedText style={{ width: 190, fontSize: 15, fontWeight: 400 }} numberOfLines={2}>{DetailProduct?.title}</ThemedText>
+        <View style={styles.container}>
+            <ThemedView style={styles.header}>
+                <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+                    <Arrow width={20} height={20} style={styles.backArrow} />
+                </TouchableOpacity>
+                <ThemedText style={styles.headerTitle}>Detail Product</ThemedText>
+                <ThemedView style={styles.headerRight}>
+                    <HistorySvg fill="#97999D" width={22} height={22} />
+                </ThemedView>
+            </ThemedView>
+            <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} >
+                <ThemedView style={styles.body}>
+                    <ThemedView style={styles.productCard}>
+                        <ThemedView style={styles.productSubContainer}>
+                            <Image source={{ uri: DetailProduct?.image }} style={styles.productImage} />
+                            <ThemedView style={styles.titleRow}>
+                                <ThemedText style={styles.titleText} numberOfLines={2}>{DetailProduct?.title}</ThemedText>
                                 <PromoChip />
                             </ThemedView>
-                            <ThemedText style={{ fontSize: 20, fontWeight: 600, marginTop: 10 }}>{withSymbol}</ThemedText>
+                            <ThemedText style={styles.priceText}>{withSymbol}</ThemedText>
                             <BottomChip width={'100%'} />
                         </ThemedView>
                     </ThemedView>
-                    <ThemedView style={{ width: '100%', padding: 14, backgroundColor: 'transparent', gap: 10, marginTop: 20, marginBottom: 20 }}>
-                        <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <ThemedText style={{ fontSize: 18 }}>Description</ThemedText>
-                            <ThemedView style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                    <ThemedView style={styles.descriptionSection}>
+                        <ThemedView style={styles.descriptionHeader}>
+                            <ThemedText style={styles.descriptionTitle}>Description</ThemedText>
+                            <ThemedView style={styles.ratingRow}>
                                 <Star />
-                                <ThemedText style={{ fontSize: 18 }}>{DetailProduct?.rating.rate}</ThemedText>
-                                <ThemedText style={{ fontSize: 14, fontWeight: 400 }}>({DetailProduct?.rating.count})</ThemedText>
+                                <ThemedText style={styles.ratingText}>{DetailProduct?.rating.rate}</ThemedText>
+                                <ThemedText style={styles.ratingCount}>({DetailProduct?.rating.count})</ThemedText>
                             </ThemedView>
                         </ThemedView>
-                        <ThemedText style={{ fontSize: 14, fontWeight: 400, textAlign: 'justify' }}>{DetailProduct?.description}</ThemedText>
+                        <ThemedText style={styles.descriptionText}>{DetailProduct?.description}</ThemedText>
                     </ThemedView>
                 </ThemedView >
             </ScrollView>
-            <ThemedView style={{ paddingHorizontal: 12, width: '100%', bottom: 70, backgroundColor: "transparent", height: 50 }}>
+            {check ? (<ThemedView style={styles.addToCartContainer}>
                 <TouchableOpacity
-                    style={{
-                        width: "100%",
-                        height: 50,
-                        backgroundColor: adding ? "#A3D49A" : "#61AD4E",
-                        borderRadius: 10,
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
+                    style={[styles.addToCartButton, adding && styles.addToCartButtonAdding]}
                     disabled={adding}
                     onPress={async () => {
                         if (adding || !DetailProduct || !Uid) return;
                         setAdding(true);
                         await addToCart(DetailProduct!, Uid!);
+                        checkSingleProduct();
                         setAdding(false);
                         setCount(count + 1);
-                    }}
-                >
+                    }}>
                     {adding ? (
                         <ActivityIndicator size="small" color="#fff" />
                     ) : (
-                        <ThemedText style={{ color: "#fff", fontSize: 14 }}>
+                        <ThemedText style={styles.addToCartButtonText}>
                             Add to Cart
                         </ThemedText>
                     )}
                 </TouchableOpacity>
-            </ThemedView>
+            </ThemedView>) : (<></>)}
             <TouchableOpacity
-                style={styleDetailPage.fab}
+                style={styles.fab}
                 onPress={() => router.push('/cart')}
             >
-                <ThemedView style={styleDetailPage.fabNotification}>
-                    <ThemedText style={styleDetailPage.fabNotificationText}>{count}</ThemedText>
+                <ThemedView style={styles.fabNotification}>
+                    <ThemedText style={styles.fabNotificationText}>{count}</ThemedText>
                 </ThemedView>
                 <Checkout />
             </TouchableOpacity>
         </View>
     )
 }
-
-const styleDetailPage = StyleSheet.create({
-    body: {
-        alignItems: 'center',
-    },
-    container: {
-        marginTop: 20,
-        borderRadius: 24,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 358,
-        height: 500,
-        backgroundColor: "#fff",
-        padding: 14,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 8,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 26,
-        elevation: 8,
-    },
-    subContainer: {
-        width: "100%",
-        height: "100%",
-        overflow: 'hidden',
-        borderRadius: 20,
-        gap: '5'
-    },
-    image: {
-        width: '100%',
-        height: '68%',
-        borderRadius: 20,
-    },
-    fabNotificationText: {
-        fontSize: 12,
-        color: '#fff'
-    },
-    fabNotification: {
-        width: 25,
-        height: 25,
-        backgroundColor: '#FF0000',
-        borderRadius: 20,
-        bottom: 45,
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        left: 40
-    },
-    fab: {
-        position: 'absolute',
-
-        right: 20,
-        bottom: 150,
-        width: 56,
-        height: 56,
-
-        backgroundColor: '#FDB447',
-        borderRadius: 16,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-
-        elevation: 8,
-
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-    },
-})
+//                  {adding ? (
+//                         <ActivityIndicator size="small" color="#fff" />
+//                     ) : (
+//                         <ThemedText style={{ color: "#fff", fontSize: 14 }}>
+//                             Add to Cart
+//                         </ThemedText>
+//                     )}
+//                 </TouchableOpacity>
+//             </ThemedView>) : (<></>)}
+//             <TouchableOpacity
+//                 style={styleDetailPage.fab}
+//                 onPress={() => router.push('/cart')}
+//             >
+//                 <ThemedView style={styleDetailPage.fabNotification}>
+//                     <ThemedText style={styleDetailPage.fabNotificationText}>{count}</ThemedText>
+//                 </ThemedView>
+//                 <Checkout />
+//             </TouchableOpacity>
+//         </View>
+//     )
+// }

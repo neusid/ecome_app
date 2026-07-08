@@ -1,19 +1,36 @@
-import Arrow from "@/assets/expo.icon/Assets/arrow.svg";
-import Ticket from "@/assets/expo.icon/Assets/ticket.svg";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
+import Arrow from "@/assets/expo.icon/Assets/arrow.svg"
+import HistorySvg from "@/assets/expo.icon/Assets/history.svg"
+import Ticket from "@/assets/expo.icon/Assets/ticket.svg"
+import { ThemedText } from '@/components/themed-text'
+import { ThemedView } from '@/components/themed-view'
+import { TransformPrice } from '@/constants/formater'
+import useDetailTransactionPage from "@/features/detail_transaction/hooks/use_detail_transaction_page"
+import styles from "@/features/detail_transaction/screen/detail_transaction.styles"
+import { router, useLocalSearchParams } from "expo-router"
+import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native'
+import OrderComponent from "../components/order_component"
 
-import CartComponent from "@/features/cart/components/cart-component";
 
-import HistorySvg from "@/assets/expo.icon/Assets/history.svg";
-import { router } from "expo-router";
-import { ScrollView, TouchableOpacity } from "react-native";
-import useCartPage from "../hooks/use_cart_page";
-import { styles } from "./cart_page.styles";
+export default function DetailTransaction() {
 
-export default function CartPage() {
+    const { loading, DetailTransaction, setDetailTransaction, setLoading, handleGetData, } = useDetailTransactionPage();
+    const { id } = useLocalSearchParams();
 
-    const { Uid, CartList, totalPrice, handleCheckout, handleLocalIncrease, handleLocalDecrease, TransformPrice } = useCartPage();
+    if (loading) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <ActivityIndicator size="large" color="#61AD4E" />
+            </View>
+        );
+    }
+
+    if (!DetailTransaction) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <ThemedText>Order not found</ThemedText>
+            </View>
+        );
+    }
 
     return (
         <ThemedView
@@ -27,7 +44,7 @@ export default function CartPage() {
                 <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
                     <Arrow width={20} height={20} style={{ transform: [{ rotate: "180deg" }] }} />
                 </TouchableOpacity>
-                <ThemedText style={styles.headerTitle}>Detail Product</ThemedText>
+                <ThemedText style={styles.headerTitle}>Order Detail</ThemedText>
                 <ThemedView style={styles.headerRight}>
                     <HistorySvg fill="#97999D" width={22} height={22} />
                 </ThemedView>
@@ -50,23 +67,21 @@ export default function CartPage() {
                             backgroundColor: "transparent",
                         }}>
                         {
-                            (
-                                CartList.map((cart) => (
-                                    <CartComponent
-                                        key={cart.id}
-                                        id={cart.id}
-                                        title={cart.product.title}
-                                        price={cart.product.price}
-                                        description={cart.product.description}
-                                        category={cart.product.category}
-                                        image={cart.product.image}
-                                        rating={cart.product.rating}
-                                        quantity={cart.quantity}
-                                        onIncrease={handleLocalIncrease}
-                                        onDecrease={handleLocalDecrease}
-                                    />
-                                ))
-                            )
+                            DetailTransaction.products.map((item) => (
+                                <OrderComponent
+                                    key={item.product.id}
+                                    id={item.product.id.toString()}
+                                    title={item.product.title}
+                                    price={item.product.price}
+                                    description={item.product.description}
+                                    category={item.product.category}
+                                    image={item.product.image}
+                                    rating={item.product.rating}
+                                    quantity={item.quantity}
+                                    onIncrease={() => true}
+                                    onDecrease={() => true}
+                                />
+                            ))
                         }
                     </ThemedView>
                 </ScrollView>
@@ -154,7 +169,7 @@ export default function CartPage() {
                                 color: "#1C2229",
                             }}
                         >
-                            {TransformPrice(totalPrice)}
+                            {TransformPrice(DetailTransaction.total_price)}
                         </ThemedText>
                     </ThemedView>
 
@@ -167,7 +182,6 @@ export default function CartPage() {
                             alignItems: "center",
                             justifyContent: "center",
                         }}
-                        onPress={handleCheckout}
                     >
                         <ThemedText
                             style={{
@@ -175,11 +189,11 @@ export default function CartPage() {
                                 fontSize: 14,
                             }}
                         >
-                            Checkout
+                            Reorder
                         </ThemedText>
                     </TouchableOpacity>
                 </ThemedView>
             </ThemedView>
         </ThemedView>
-    );
+    )
 }

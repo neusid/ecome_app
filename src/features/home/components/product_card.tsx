@@ -6,8 +6,9 @@ import { ProductEntities } from '@/domain/entities/product_entities';
 import { useAuthStore } from '@/stores/authStore';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, View } from 'react-native';
 import { formatCurrency } from 'react-native-format-currency';
+import { styles } from './product_card.styles';
 
 type ProductCardProps = ProductEntities & {
     onIncrease?: (id: string) => void;
@@ -50,94 +51,21 @@ export default function ProductCard({ onIncrease, onDecrease, ...product }: Prod
                     transform: [{ scale: pressed ? 0.98 : 1 }],
                 },
             ]}>
-            <ThemedView style={cardStyle.ProductCard}>
-                <View style={cardStyle.CardImageWrapper}>
-                    <Image source={{ uri: product.image }} resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: 10 }} />
+            <ThemedView style={styles.ProductCard}>
+                <View style={styles.CardImageWrapper}>
+                    <Image source={{ uri: product.image }} resizeMode='cover' style={styles.productImage} />
                 </View>
-                <ThemedView style={cardStyle.CardContent}>
-                    <ThemedText numberOfLines={2} style={cardStyle.ProductTitle}>{product.title}</ThemedText>
+                <ThemedView style={styles.CardContent}>
+                    <ThemedText numberOfLines={2} style={styles.ProductTitle}>{product.title}</ThemedText>
                 </ThemedView>
-                <ThemedView style={cardStyle.CardFooter}>
-                    <ThemedText style={cardStyle.ProductPrice}>{withSymbol}</ThemedText>
-                    <ThemedView style={{ flexDirection: "row", position: 'relative' }}>
-                        <Star width={10} height={10} style={cardStyle.ProductIcon} />
-                        <ThemedText style={cardStyle.ProductPrice}>{product.rating.rate}</ThemedText>
+                <ThemedView style={styles.CardFooter}>
+                    <ThemedText style={styles.ProductPrice}>{withSymbol}</ThemedText>
+                    <ThemedView style={styles.ratingRow}>
+                        <Star width={10} height={10} style={styles.ProductIcon} />
+                        <ThemedText style={styles.ProductPrice}>{product.rating.rate}</ThemedText>
                     </ThemedView>
                 </ThemedView>
             </ThemedView>
         </Pressable>
     )
 }
-
-const cardStyle = StyleSheet.create({
-    ProductCard: {
-        width: 167,
-        height: 244,
-        paddingHorizontal: 12,
-        paddingTop: 12,
-        borderRadius: 17,
-        backgroundColor: '#fff',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 10,
-        elevation: 5,
-    },
-    CardImageWrapper: {
-        width: 143,
-        height: 143,
-        backgroundColor: '#fff',
-        borderRadius: 5,
-        marginBottom: 90,
-        overflow: 'hidden',
-    },
-    CardContent: {
-        marginTop: 30,
-        paddingHorizontal: 5
-    },
-    ProductTitle: {
-        fontSize: 12,
-        fontWeight: '400',
-        color: '#1C2229',
-        top: -110,
-        lineHeight: 12
-    },
-    ProductWeight: {
-        fontSize: 10,
-        fontWeight: '400',
-        color: '#97999D',
-        top: -115
-    },
-    CardFooter: {
-        paddingHorizontal: 5,
-        marginTop: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    ProductIcon: {
-        fontSize: 14,
-        fontWeight: '400',
-        color: '#1C2229',
-        top: -113,
-        right: 5,
-    },
-    ProductPrice: {
-        fontSize: 14,
-        fontWeight: '400',
-        color: '#1C2229',
-        top: -120
-    },
-    AddButton: {
-        width: 24,
-        height: 24,
-        backgroundColor: '#EFF7ED',
-        top: -120,
-        borderRadius: 3,
-    },
-    AddButtonText: {
-        fontSize: 14,
-        fontWeight: '400',
-        color: '#61AD4E',
-        textAlign: 'center'
-    },
-})

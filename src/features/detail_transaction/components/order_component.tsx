@@ -1,11 +1,11 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import type { ProductCardComponentProps } from "@/domain/entities/product_card_entities";
-import { Image, TouchableOpacity } from "react-native";
+import { Image } from "react-native";
 import { formatCurrency } from "react-native-format-currency";
-import { styles } from "./cart-component.styles";
+import { styles } from "./order_component.style";
 
-export default function CartComponent(product: ProductCardComponentProps) {
+export default function OrderComponent(product: ProductCardComponentProps) {
 
     const TransformPrice = (): string => {
         const roundedPrice = Math.round(product.price * 100) / 100;
@@ -48,27 +48,9 @@ export default function CartComponent(product: ProductCardComponentProps) {
                     </ThemedText>
 
                     <ThemedView style={styles.quantityContainer}>
-                        <TouchableOpacity
-                            style={styles.AddButton}
-                            onPress={() => product.onDecrease(product.id)}
-                        >
-                            <ThemedText style={styles.AddButtonText}>
-                                -
-                            </ThemedText>
-                        </TouchableOpacity>
-
                         <ThemedText style={styles.QuantityText}>
                             {product.quantity}
                         </ThemedText>
-
-                        <TouchableOpacity
-                            style={styles.AddButton}
-                            onPress={() => product.onIncrease(product.id)}
-                        >
-                            <ThemedText style={styles.AddButtonText}>
-                                +
-                            </ThemedText>
-                        </TouchableOpacity>
                     </ThemedView>
                 </ThemedView>
             </ThemedView>

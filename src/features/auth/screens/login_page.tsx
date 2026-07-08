@@ -169,12 +169,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        height: 900,
+        boxSizing: 'border-box'
     },
     heroSection: {
         alignItems: 'center',
-        paddingTop: Spacing.six,
+        paddingTop: 120,
         flex: 1,
         paddingHorizontal: Spacing.four,
+        height: '100%'
     },
     headLine: {
         width: 345,

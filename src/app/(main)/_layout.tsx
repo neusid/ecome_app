@@ -6,8 +6,10 @@ export default function MainLayout() {
             headerShown: true
         }} >
             <Stack.Screen name="home" />
-            <Stack.Screen name="cart" />
-            <Stack.Screen name="detail" />
+            <Stack.Screen name="cart" options={{ headerShown: false }} />
+            <Stack.Screen name="detail" options={{ headerShown: false }} />
+            <Stack.Screen name="transaction" options={{ headerShown: false }} />
+            <Stack.Screen name="detail_transaction" options={{ headerShown: false }} />
         </Stack>
     )
 }
