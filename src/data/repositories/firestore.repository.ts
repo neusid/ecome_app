@@ -185,3 +185,25 @@ export const GetSingleOrder = async (
         ...(docSnap.data() as Omit<Orders, "id">),
     };
 };
+
+export const batchDeleteCart = async (ids: string[]) => {
+    if (ids.length === 0) return;
+
+    const batch = writeBatch(db);
+    ids.forEach((id) => {
+        batch.delete(doc(db, "carts", id));
+    });
+
+    await batch.commit();
+};
+
+export const batchDeleteOrder = async (ids: string[]) => {
+    if (ids.length === 0) return;
+
+    const batch = writeBatch(db);
+    ids.forEach((id) => {
+        batch.delete(doc(db, "orders", id));
+    });
+
+    await batch.commit();
+};

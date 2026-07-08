@@ -1,185 +1,119 @@
 import Arrow from "@/assets/expo.icon/Assets/arrow.svg";
+import Check from "@/assets/expo.icon/Assets/check.svg";
+import Delete from "@/assets/expo.icon/Assets/delete.svg";
 import Ticket from "@/assets/expo.icon/Assets/ticket.svg";
+
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 
 import CartComponent from "@/features/cart/components/cart-component";
-
-import HistorySvg from "@/assets/expo.icon/Assets/history.svg";
 import { router } from "expo-router";
-import { ScrollView, TouchableOpacity } from "react-native";
+import { ActivityIndicator, ScrollView, TouchableOpacity, View } from "react-native";
 import useCartPage from "../hooks/use_cart_page";
 import { styles } from "./cart_page.styles";
 
 export default function CartPage() {
 
-    const { Uid, CartList, totalPrice, handleCheckout, handleLocalIncrease, handleLocalDecrease, TransformPrice } = useCartPage();
+    const { Uid, CartList, totalPrice, handleCheckout, handleLocalIncrease, handleLocalDecrease, TransformPrice, selectMode, selectedIds, isAllSelected, toggleSelectMode, handleToggleSelect, handleSelectAll, handleDeleteSelected, Loading } = useCartPage();
+
+    if (Loading) {
+        return (
+            <ThemedView style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#61AD4E" />
+            </ThemedView>
+        )
+    }
 
     return (
-        <ThemedView
-            style={{
-                justifyContent: "space-between",
-                height: "100%",
-                backgroundColor: "#F5F7F9",
-            }}
-        >
+        <ThemedView style={styles.container}>
             <ThemedView style={styles.header}>
                 <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-                    <Arrow width={20} height={20} style={{ transform: [{ rotate: "180deg" }] }} />
+                    <Arrow width={20} height={20} style={styles.backArrow} />
                 </TouchableOpacity>
-                <ThemedText style={styles.headerTitle}>Detail Product</ThemedText>
-                <ThemedView style={styles.headerRight}>
-                    <HistorySvg fill="#97999D" width={22} height={22} />
-                </ThemedView>
+                <ThemedText style={styles.headerTitle}>
+                    {selectMode ? "Select Items" : "My Cart"}
+                </ThemedText>
+                <TouchableOpacity
+                    style={[styles.headerRight, selectMode && styles.headerRightActive]}
+                    onPress={toggleSelectMode}
+                >
+                    <Delete fill={selectMode ? "#fff" : "#E33434"} width={22} height={20} />
+                </TouchableOpacity>
             </ThemedView>
-            <ThemedView
-                style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: 5,
-                    backgroundColor: "transparent",
-                    gap: 10,
-                }}
-            >
-                <ScrollView style={{ height: "62%", marginBottom: 65 }} showsVerticalScrollIndicator={false}>
-                    <ThemedView
-                        style={{
-                            flexDirection: "column",
-                            flexWrap: "wrap",
-                            gap: 10,
-                            backgroundColor: "transparent",
-                        }}>
-                        {
-                            (
-                                CartList.map((cart) => (
-                                    <CartComponent
-                                        key={cart.id}
-                                        id={cart.id}
-                                        title={cart.product.title}
-                                        price={cart.product.price}
-                                        description={cart.product.description}
-                                        category={cart.product.category}
-                                        image={cart.product.image}
-                                        rating={cart.product.rating}
-                                        quantity={cart.quantity}
-                                        onIncrease={handleLocalIncrease}
-                                        onDecrease={handleLocalDecrease}
-                                    />
-                                ))
-                            )
-                        }
+
+            <ThemedView style={styles.scrollViewContainer}>
+                <ScrollView style={selectMode ? styles.scrollViewDelete : styles.scrollView} showsVerticalScrollIndicator={false}>
+                    <ThemedView style={styles.cartItemsContainer}>
+                        {CartList.map((cart) => (
+                            <CartComponent
+                                key={cart.id}
+                                id={cart.id}
+                                title={cart.product.title}
+                                price={cart.product.price}
+                                description={cart.product.description}
+                                category={cart.product.category}
+                                image={cart.product.image}
+                                rating={cart.product.rating}
+                                quantity={cart.quantity}
+                                onIncrease={handleLocalIncrease}
+                                onDecrease={handleLocalDecrease}
+                                selected={selectedIds.has(cart.id)}
+                                onToggleSelect={selectMode ? handleToggleSelect : undefined}
+                                selectMode={selectMode}
+                            />
+                        ))}
                     </ThemedView>
                 </ScrollView>
             </ThemedView>
 
-            <ThemedView
-                style={{
-                    width: "100%",
-                    height: 170,
-                    backgroundColor: "#fff",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    alignItems: "flex-end",
-                    padding: 20,
-                    top: -60,
-                    marginBottom: 28,
-                    borderRadius: 20,
-                }}
-            >
-                <TouchableOpacity>
-                    <ThemedView
-                        style={{
-                            backgroundColor: "#EFF7ED",
-                            width: "100%",
-                            height: 56,
-                            marginBottom: 20,
-                            borderRadius: 20,
-                            borderColor: "#457B37",
-                            borderWidth: 1,
-                            justifyContent: "space-between",
-                            paddingHorizontal: 20,
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 20,
-                        }}
-                    >
-                        <ThemedView
-                            style={{
-                                backgroundColor: "transparent",
-                                flexDirection: "row",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                gap: 10,
-                            }}
-                        >
-                            <Ticket width={28} height={28} />
+            {selectMode ? (
+                <ThemedView style={styles.bottomCardDelete}>
+                    <TouchableOpacity style={styles.selectAllRow} onPress={handleSelectAll}>
+                        <View style={[styles.checkbox, isAllSelected && styles.checkboxSelected]}>
+                            {isAllSelected && (
+                                <Check width={17} fill="#fff" color="#fff" />
+                            )}
+                        </View>
+                        <ThemedText style={styles.selectAllText}>Select All</ThemedText>
+                    </TouchableOpacity>
 
-                            <ThemedText
-                                style={{
-                                    fontSize: 14,
-                                    color: "#457B37",
-                                }}
-                                adjustsFontSizeToFit
-                            >
-                                Got any voucher? Check it here
-                            </ThemedText>
-                        </ThemedView>
-
-                        <Arrow />
-                    </ThemedView>
-                </TouchableOpacity>
-
-                <ThemedView
-                    style={{
-                        width: "100%",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "flex-end",
-                    }}
-                >
-                    <ThemedView>
+                    <TouchableOpacity style={[styles.deleteButton, selectedIds.size > 0 ? styles.deleteButtonActive : styles.deleteButtonDisabled,]} disabled={selectedIds.size === 0} onPress={handleDeleteSelected}>
                         <ThemedText
-                            style={{
-                                fontSize: 12,
-                                color: "#B9BABD",
-                                fontWeight: "400",
-                            }}>
-                            Total
-                        </ThemedText>
-
-                        <ThemedText
-                            style={{
-                                fontSize: 24,
-                                fontWeight: "600",
-                                color: "#1C2229",
-                            }}
+                            style={[
+                                styles.deleteButtonText,
+                                selectedIds.size > 0 ? styles.deleteButtonTextActive : styles.deleteButtonTextDisabled,
+                            ]}
                         >
-                            {TransformPrice(totalPrice)}
-                        </ThemedText>
-                    </ThemedView>
-
-                    <TouchableOpacity
-                        style={{
-                            width: 150,
-                            height: 50,
-                            backgroundColor: "#61AD4E",
-                            borderRadius: 10,
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                        onPress={handleCheckout}
-                    >
-                        <ThemedText
-                            style={{
-                                color: "#fff",
-                                fontSize: 14,
-                            }}
-                        >
-                            Checkout
+                            Delete ({selectedIds.size}) item{selectedIds.size !== 1 ? "s" : ""}
                         </ThemedText>
                     </TouchableOpacity>
                 </ThemedView>
-            </ThemedView>
+            ) : (
+                <ThemedView style={[styles.bottomCard, styles.bottomCardCheckout]}>
+                    <TouchableOpacity>
+                        <ThemedView style={styles.voucherRow}>
+                            <ThemedView style={styles.voucherRowInner}>
+                                <Ticket width={28} height={28} />
+                                <ThemedText style={styles.voucherText} adjustsFontSizeToFit>
+                                    Got any voucher? Check it here
+                                </ThemedText>
+                            </ThemedView>
+                            <Arrow />
+                        </ThemedView>
+                    </TouchableOpacity>
+
+                    <ThemedView style={styles.totalRow}>
+                        <ThemedView>
+                            <ThemedText style={styles.totalLabel}>Total</ThemedText>
+                            <ThemedText style={styles.totalPrice}>{TransformPrice(totalPrice)}</ThemedText>
+                        </ThemedView>
+
+                        <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
+                            <ThemedText style={styles.checkoutButtonText}>Checkout</ThemedText>
+                        </TouchableOpacity>
+                    </ThemedView>
+                </ThemedView>
+            )}
         </ThemedView>
     );
 }

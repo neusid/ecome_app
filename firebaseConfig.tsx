@@ -1,6 +1,6 @@
 import { getApp, getApps, initializeApp, setLogLevel } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, initializeFirestore, memoryLocalCache } from "firebase/firestore";
 
 setLogLevel('error');
 
@@ -20,4 +20,6 @@ const app = getApps().length
 
 export const auth = getAuth(app);
 
-export const db = getFirestore(app);
+export const db = initializeFirestore(app, {
+    localCache: memoryLocalCache(),
+});

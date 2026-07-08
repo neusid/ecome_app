@@ -6,7 +6,7 @@ import { ThemedView } from '@/components/themed-view'
 import { TransformPrice } from '@/constants/formater'
 import useDetailTransactionPage from "@/features/detail_transaction/hooks/use_detail_transaction_page"
 import styles from "@/features/detail_transaction/screen/detail_transaction.styles"
-import { router, useLocalSearchParams } from "expo-router"
+import { router } from "expo-router"
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native'
 import OrderComponent from "../components/order_component"
 
@@ -14,7 +14,6 @@ import OrderComponent from "../components/order_component"
 export default function DetailTransaction() {
 
     const { loading, DetailTransaction, setDetailTransaction, setLoading, handleGetData, } = useDetailTransactionPage();
-    const { id } = useLocalSearchParams();
 
     if (loading) {
         return (

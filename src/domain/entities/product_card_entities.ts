@@ -9,6 +9,9 @@ export type ProductCardComponentProps = {
     quantity: number,
     onIncrease: (id: string) => void;
     onDecrease: (id: string) => void;
+    selected?: boolean;
+    onToggleSelect?: (id: string) => void;
+    selectMode?: boolean;
 };
 
 type Rating = {

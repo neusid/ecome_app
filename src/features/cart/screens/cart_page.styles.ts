@@ -1,6 +1,11 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
+    loadingContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
     container: {
         justifyContent: "space-between",
         height: "100%",
@@ -37,19 +42,26 @@ export const styles = StyleSheet.create({
         width: 36,
         height: 36,
         borderRadius: 12,
-        backgroundColor: "#F5F7F9",
+        backgroundColor: "#FCE9E9",
         justifyContent: "center",
         alignItems: "center",
+    },
+    headerRightActive: {
+        backgroundColor: "#E33434",
     },
     scrollViewContainer: {
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 5,
+        marginTop: 0,
         backgroundColor: "transparent",
         gap: 10,
     },
     scrollView: {
         height: "62%",
+        marginBottom: 65,
+    },
+    scrollViewDelete: {
+        height: "66%",
         marginBottom: 65,
     },
     cartItemsContainer: {
@@ -58,17 +70,77 @@ export const styles = StyleSheet.create({
         gap: 10,
         backgroundColor: "transparent",
     },
-    checkoutCard: {
+    bottomCard: {
         width: "100%",
         height: 170,
         backgroundColor: "#fff",
         flexDirection: "column",
         justifyContent: "space-between",
-        alignItems: "flex-end",
         padding: 20,
         top: -60,
         marginBottom: 28,
         borderRadius: 20,
+    },
+    bottomCardDelete: {
+        width: "100%",
+        height: 140,
+        backgroundColor: "#fff",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        padding: 20,
+        top: -60,
+        marginBottom: 28,
+        borderRadius: 20,
+    },
+    bottomCardCheckout: {
+        alignItems: "flex-end",
+    },
+    selectAllRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 12,
+    },
+    checkbox: {
+        width: 22,
+        height: 22,
+        borderRadius: 6,
+        borderWidth: 2,
+        borderColor: "#B9BABD",
+        backgroundColor: "#fff",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    checkboxSelected: {
+        backgroundColor: "#61AD4E",
+        borderColor: "#61AD4E",
+    },
+    selectAllText: {
+        fontSize: 14,
+        fontWeight: "500",
+        color: "#1C2229",
+    },
+    deleteButton: {
+        width: "100%",
+        height: 50,
+        borderRadius: 10,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    deleteButtonActive: {
+        backgroundColor: "#E33434",
+    },
+    deleteButtonDisabled: {
+        backgroundColor: "#E0E0E0",
+    },
+    deleteButtonText: {
+        fontSize: 14,
+        fontWeight: "600",
+    },
+    deleteButtonTextActive: {
+        color: "#fff",
+    },
+    deleteButtonTextDisabled: {
+        color: "#999",
     },
     voucherRow: {
         backgroundColor: "#EFF7ED",
