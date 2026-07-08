@@ -21,7 +21,6 @@ function useCartPage() {
 
     const isAllSelected = CartList.length > 0 && selectedIds.size === CartList.length;
 
-    // Sync count ke zustand store setiap CartList berubah
     useEffect(() => {
         const count = CartList.reduce((sum, item) => sum + item.quantity, 0);
         setCount(count);

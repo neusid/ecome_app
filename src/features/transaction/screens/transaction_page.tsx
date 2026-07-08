@@ -47,8 +47,7 @@ export default function TransactionPage() {
                             } else {
                                 router.push({ pathname: '/detail_transaction', params: { id: order.id } });
                             }
-                        }}
-                    >
+                        }}>
                         <ThemedView style={styles.card}>
                             {SelectMode && (
                                 <View style={[styles.checkbox, SelectedIdMaps.has(order.id) && styles.checkboxSelected]}>
