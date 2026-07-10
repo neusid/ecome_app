@@ -68,7 +68,7 @@ export default function DetailTransaction() {
                         {
                             DetailTransaction.products.map((item) => (
                                 <OrderComponent
-                                    key={item.product.id}
+                                    key={item.product.id + Math.random()}
                                     id={item.product.id.toString()}
                                     title={item.product.title}
                                     price={item.product.price}

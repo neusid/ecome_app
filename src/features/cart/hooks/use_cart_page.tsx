@@ -1,4 +1,4 @@
-import { CheckoutCart, GetCart, batchDeleteCart, batchUpdateCart } from "@/data/repositories/firestore.repository";
+import { CheckoutCart, GetCart, batchDeleteCart, batchUpdateCart, deleteSingleCart } from "@/data/repositories/firestore.repository";
 import { ProductCartEntities } from "@/domain/entities/product_entities";
 import { useAuthStore } from "@/stores/authStore";
 import { useCartStore } from "@/stores/cartStore";
@@ -79,6 +79,19 @@ function useCartPage() {
             setSelectedIds(new Set(CartList.map((item) => item.id)));
         }
     };
+
+    const handleDeleteSingle = async (id: string) => {
+
+        setLoading(true);
+
+        if (!Uid) return;
+        console.log("Clicked!");
+
+        await deleteSingleCart(id);
+        await fetchCart(Uid);
+
+        setLoading(false);
+    }
 
     const handleDeleteSelected = async () => {
         if (!Uid || selectedIds.size === 0) return;
@@ -183,6 +196,7 @@ function useCartPage() {
         handleSelectAll,
         handleDeleteSelected,
         Loading,
+        handleDeleteSingle,
     }
 }
 

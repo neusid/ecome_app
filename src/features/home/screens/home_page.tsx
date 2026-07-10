@@ -1,5 +1,3 @@
-import Checkout from "@/assets/expo.icon/Assets/checkout.svg";
-import HistorySvg from "@/assets/expo.icon/Assets/history.svg";
 import IconWrapper2 from "@/assets/expo.icon/Assets/icon-wrapper-2.svg";
 import IconWrapper3 from "@/assets/expo.icon/Assets/icon-wrapper-3.svg";
 import IconWrapper4 from "@/assets/expo.icon/Assets/icon-wrapper-4.svg";
@@ -25,7 +23,7 @@ export default function HomePage() {
                 <ThemedView style={styles.Body}>
                     <Image source={require('@/assets/expo.icon/Assets/card.png')} style={cardImage} />
                     <ThemedView style={styles.WrapInputSearch}>
-                        <TextInput style={styles.InputSearch} placeholder="What’s your daily needs?" />
+                        <TextInput style={styles.InputSearch} placeholder="What's your daily needs?" />
                     </ThemedView>
 
                     <ThemedView style={styles.CategorySection}>
@@ -73,7 +71,7 @@ export default function HomePage() {
                                 </TouchableOpacity>
                             </ThemedView>
                             <ThemedView style={styles.FlashSaleRow}>
-                                {productListAxios?.map((data) => (
+                                {productListAxios?.filter(item => item.rating.rate > 4.7).slice(0, 2).map((data) => (
                                     <ProductCard
                                         key={data.id}
                                         id={data.id}
@@ -90,20 +88,6 @@ export default function HomePage() {
                     </ThemedView>
                 </ThemedView>
             </ScrollView>
-
-            <TouchableOpacity
-                style={styles.fab}
-                onPress={() => router.push('/cart')}
-            >
-                <Checkout />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                style={styles.fabSeccond}
-                onPress={() => router.push('/transaction')}
-            >
-                <HistorySvg fill='#ffff' />
-            </TouchableOpacity>
         </View>
     )
 }

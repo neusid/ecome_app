@@ -1,7 +1,8 @@
 import { GetOrder, batchDeleteOrder } from "@/data/repositories/firestore.repository";
 import { Orders } from "@/domain/entities/orders_entities";
 import { useAuthStore } from "@/stores/authStore";
-import { useEffect, useState } from "react";
+import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 function useTransactionPage() {
     const Uid = useAuthStore((s) => s.uid);
@@ -11,60 +12,81 @@ function useTransactionPage() {
     const [SelectMode, setSelectMode] = useState(false);
     const [SelectedIdMaps, setSelectedIdMaps] = useState<Set<string>>(new Set());
 
+    const lastPageRef = useRef<QueryDocumentSnapshot<DocumentData> | undefined>(undefined);
+    const hasMoreRef = useRef(true);
+    const isLoadingRef = useRef(false);
+
     const isAllSelected =
         TransactionCartList.length > 0 &&
         SelectedIdMaps.size === TransactionCartList.length;
 
+    const handleGetData = useCallback(async () => {
+        if (!Uid || !hasMoreRef.current || isLoadingRef.current) return;
+        isLoadingRef.current = true;
+        setLoading(true);
+
+        const response = await GetOrder(Uid as string, lastPageRef.current);
+
+        if (response.lastDoc != null) {
+            lastPageRef.current = response.lastDoc;
+        } else {
+            hasMoreRef.current = false;
+        }
+
+        setTransactionCartList(prev => [...prev, ...response.orders]);
+        setLoading(false);
+        isLoadingRef.current = false;
+    }, [Uid]);
+
     useEffect(() => {
         handleGetData();
-    }, []);
+    }, [handleGetData]);
 
-    const handleGetData = async () => {
-        if (!Uid || Array.isArray(Uid)) return;
-        setLoading(true);
-        const response = await GetOrder(Uid as string);
-        setTransactionCartList(response);
-        setLoading(false);
-    };
-
-    const toggleSelectMode = () => {
+    const toggleSelectMode = useCallback(() => {
         setSelectMode((prev) => {
             if (prev) {
                 setSelectedIdMaps(new Set());
             }
             return !prev;
         });
-    };
+    }, []);
 
-    const handleToggleSelect = (id: string) => {
+    const handleToggleSelect = useCallback((id: string) => {
         setSelectedIdMaps((prev) => {
             const next = new Set(prev);
             if (next.has(id)) next.delete(id);
             else next.add(id);
             return next;
         });
-    };
+    }, []);
 
-    const handleSelectAll = () => {
-        if (isAllSelected) {
-            setSelectedIdMaps(new Set());
-        } else {
-            setSelectedIdMaps(new Set(TransactionCartList.map((item) => item.id)));
-        }
-    };
+    const handleSelectAll = useCallback(() => {
+        setTransactionCartList((list) => {
+            setSelectedIdMaps((prev) => {
+                const allSelected = list.length > 0 && prev.size === list.length;
+                if (allSelected) {
+                    return new Set();
+                } else {
+                    return new Set(list.map((item) => item.id));
+                }
+            });
+            return list;
+        });
+    }, []);
 
-    const handleDeleteSelected = async () => {
+    const handleDeleteSelected = useCallback(async () => {
         if (!Uid || SelectedIdMaps.size === 0) return;
-
         setLoading(true);
         const ids = Array.from(SelectedIdMaps);
         await batchDeleteOrder(ids);
 
         setSelectedIdMaps(new Set());
         setSelectMode(false);
-        await handleGetData();
-        setLoading(false);
-    };
+        setTransactionCartList([]);
+        lastPageRef.current = undefined;
+        hasMoreRef.current = true;
+        handleGetData();
+    }, [Uid, SelectedIdMaps, handleGetData]);
 
     return {
         TransactionCartList,
@@ -76,6 +98,7 @@ function useTransactionPage() {
         handleToggleSelect,
         handleSelectAll,
         handleDeleteSelected,
+        handleGetData
     };
 }
 

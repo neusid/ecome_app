@@ -51,7 +51,7 @@ export const styles = StyleSheet.create({
     },
     CategorySection: {
         marginHorizontal: 16,
-        marginBottom: 80,
+        marginBottom: 30,
         marginTop: -45
     },
     CategoryRow: {
@@ -109,44 +109,6 @@ export const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'center',
         alignContent: 'center',
-        bottom: 60,
-    },
-    fab: {
-        position: 'absolute',
-        right: 20,
-        bottom: 80,
-        width: 56,
-        height: 56,
-        backgroundColor: '#FDB447',
-        borderRadius: 16,
-        justifyContent: 'center',
-        alignItems: 'center',
-        elevation: 8,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-    },
-    fabSeccond: {
-        position: 'absolute',
-        right: 20,
-        bottom: 150,
-        width: 56,
-        height: 56,
-        backgroundColor: '#FDB447',
-        borderRadius: 16,
-        justifyContent: 'center',
-        alignItems: 'center',
-        elevation: 8,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
+        marginBottom: 20
     },
 });

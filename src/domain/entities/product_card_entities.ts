@@ -12,6 +12,7 @@ export type ProductCardComponentProps = {
     selected?: boolean;
     onToggleSelect?: (id: string) => void;
     selectMode?: boolean;
+    onDelete: (id: string) => void;
 };
 
 type Rating = {

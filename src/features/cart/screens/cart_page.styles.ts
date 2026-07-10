@@ -52,13 +52,13 @@ export const styles = StyleSheet.create({
     scrollViewContainer: {
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 0,
+        marginTop: 10,
         backgroundColor: "transparent",
         gap: 10,
     },
     scrollView: {
         height: "62%",
-        marginBottom: 65,
+        marginBottom: 75,
     },
     scrollViewDelete: {
         height: "66%",
@@ -77,7 +77,7 @@ export const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "space-between",
         padding: 20,
-        top: -60,
+        top: -65,
         marginBottom: 28,
         borderRadius: 20,
     },

@@ -41,9 +41,14 @@ export const styles = StyleSheet.create({
         alignItems: "center",
     },
     scrollContent: {
-        padding: 16,
+        flex: 1,
+        paddingHorizontal: 16,
+        paddingTop: 3,
         gap: 12,
-        paddingBottom: 55,
+        backgroundColor: 'transparent'
+    },
+    scrollContentSelectActive: {
+        paddingBottom: 130,
     },
     card: {
         flexDirection: "row",

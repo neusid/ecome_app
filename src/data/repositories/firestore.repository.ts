@@ -1,6 +1,7 @@
+import { GetOrderResponse } from "@/domain/entities/order_response_entities";
 import { Orders } from "@/domain/entities/orders_entities";
 import { ProductCartEntities, ProductEntities } from "@/domain/entities/product_entities";
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where, writeBatch, } from "firebase/firestore";
+import { DocumentData, QueryDocumentSnapshot, addDoc, collection, deleteDoc, doc, getDoc, getDocs, limit, query, startAfter, updateDoc, where, writeBatch } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 
 export interface Product {
@@ -69,21 +70,6 @@ export const GetCart = async (userId: string): Promise<ProductCartEntities[]> =>
         ...(doc.data() as Omit<ProductCartEntities, "id">),
     }));
 };
-
-export const GetOrder = async (userId: string): Promise<Orders[]> => {
-    const q = query(
-        collection(db, "orders"),
-        where("id_user", "==", userId)
-    );
-
-    const snapshot = await getDocs(q);
-
-    return snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as Omit<Orders, "id">)
-    }));
-}
-
 
 export const GetSingleCart = async (userId: string, productId: string): Promise<ProductCartEntities | undefined> => {
     const q = query(
@@ -169,6 +155,35 @@ export const batchUpdateCart = async (changes: { id: string; quantity: number }[
     await batch.commit();
 };
 
+export const GetOrder = async (userId: string, lastPage: QueryDocumentSnapshot<DocumentData> | undefined): Promise<GetOrderResponse> => {
+    let q;
+
+    if (lastPage == undefined) {
+        q = query(
+            collection(db, "orders"),
+            where("id_user", "==", userId),
+            limit(10),
+        );
+    } else {
+        q = query(
+            collection(db, "orders"),
+            where("id_user", "==", userId),
+            limit(10),
+            startAfter(lastPage)
+        );
+    }
+
+    const snapshot = await getDocs(q);
+
+    return {
+        orders: snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...(doc.data() as Omit<Orders, "id">),
+        })),
+        lastDoc: snapshot.docs[snapshot.docs.length - 1] ?? null
+    };
+}
+
 export const GetSingleOrder = async (
     orderId: string
 ): Promise<Orders | null> => {
@@ -184,6 +199,13 @@ export const GetSingleOrder = async (
         id: docSnap.id,
         ...(docSnap.data() as Omit<Orders, "id">),
     };
+};
+
+export const deleteSingleCart = async (id: string) => {
+    if (!id) return;
+
+    const docRef = doc(db, "carts", id);
+    await deleteDoc(docRef);
 };
 
 export const batchDeleteCart = async (ids: string[]) => {

@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface Rating {
     rate: number;
     count: number;
@@ -18,28 +20,12 @@ export interface OrderItem {
     quantity: number;
 }
 
-export interface Order {
-    name: string;
-    id_user: string;
-    created_at: string;
-    products: OrderItem[];
-    total_price: number;
-    status: "pending" | "paid" | "cancelled" | "completed";
-    createTime: string;
-    updateTime: string;
-}
-
 export interface Orders {
     id: string;
-    created_at: CreatedAt;
+    created_at: Timestamp;
     id_user: string;
     products: OrderItem[];
     status: string;
     total_price: number;
 }
 
-export interface CreatedAt {
-    nanoseconds: number;
-    seconds: number;
-    type: string;
-}

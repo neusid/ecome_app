@@ -1,26 +1,32 @@
 import Arrow from "@/assets/expo.icon/Assets/arrow.svg";
 import Check from "@/assets/expo.icon/Assets/check.svg";
 import Delete from "@/assets/expo.icon/Assets/delete.svg";
-import Globe from "@/assets/expo.icon/Assets/globe.svg";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { TransformPrice } from "@/constants/formater";
 import { router } from "expo-router";
-import { ActivityIndicator, ScrollView, TouchableOpacity, View } from "react-native";
+import LottieView from "lottie-react-native";
+import { FlatList, TouchableOpacity, View } from "react-native";
+import CardOrderComponent from "../components/card_order.component";
 import useTransactionPage from "../hooks/use_transaction_page";
 import { styles } from "./transaction_page.styles";
 
+// const renderRightActions = () => {
+//     return (
+//         <View style={styleus.actionContainer}>
+//             <RectButton style={[styleus.actionButton, styleus.editButton]} onPress={() => true}>
+//                 <Text style={styleus.actionText}>Ubah</Text>
+//             </RectButton>
+
+//             <RectButton style={[styleus.actionButton, styleus.deleteButton]} onPress={() => true}>
+//                 <Text style={styleus.actionText}>Hapus</Text>
+//             </RectButton>
+//         </View>
+//     );
+// };
+
 export default function TransactionPage() {
 
-    const { TransactionCartList, Loading, SelectMode, SelectedIdMaps, isAllSelected, toggleSelectMode, handleToggleSelect, handleSelectAll, handleDeleteSelected } = useTransactionPage();
-
-    if (Loading) {
-        return (
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                <ActivityIndicator size="large" color="#61AD4E" />
-            </View>
-        );
-    }
+    const { TransactionCartList, Loading, SelectMode, SelectedIdMaps, isAllSelected, toggleSelectMode, handleToggleSelect, handleSelectAll, handleDeleteSelected, handleGetData } = useTransactionPage();
 
     return (
         <View style={styles.body}>
@@ -36,66 +42,32 @@ export default function TransactionPage() {
                 </TouchableOpacity>
             </ThemedView>
 
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-                {TransactionCartList?.map((order) => (
-                    <TouchableOpacity
-                        key={order.id}
-                        activeOpacity={0.9}
-                        onPress={() => {
-                            if (SelectMode) {
-                                handleToggleSelect(order.id);
-                            } else {
-                                router.push({ pathname: '/detail_transaction', params: { id: order.id } });
-                            }
-                        }}>
-                        <ThemedView style={styles.card}>
-                            {SelectMode && (
-                                <View style={[styles.checkbox, SelectedIdMaps.has(order.id) && styles.checkboxSelected]}>
-                                    {SelectedIdMaps.has(order.id) && (
-                                        <Check width={50} fill="#fff" color="#fff" />
-                                    )}
-                                </View>
-                            )}
-                            <ThemedView style={styles.cardContent}>
-                                <ThemedView style={styles.cardTop}>
-                                    <ThemedView style={styles.cardTopLeft}>
-                                        <ThemedView style={[styles.statusDot, { backgroundColor: '#000' }]} />
-                                        <ThemedView>
-                                            <ThemedText numberOfLines={1} style={styles.orderId}>{order.id}</ThemedText>
-                                            <ThemedText style={styles.date}>{order.created_at.seconds}</ThemedText>
-                                        </ThemedView>
-                                    </ThemedView>
-                                    <ThemedView style={[styles.statusBadge, { backgroundColor: '#000' }]}>
-                                        <Globe fill='#fff' width={15} />
-                                        <ThemedText style={[styles.statusText, { color: '#fff' }]}>
-                                            {order.status}
-                                        </ThemedText>
-                                    </ThemedView>
-                                </ThemedView>
+            {/* <ReanimatedSwipeable containerStyle={{ height: 80 }} renderRightActions={renderRightActions}>
+                <View style={styleus.card}>
+                    <Text style={styleus.cardTitle}>This tittle</Text>
+                    <Text style={styleus.cardSubtitle}>this description</Text>
+                </View>
+            </ReanimatedSwipeable> */}
 
-                                <ThemedView style={styles.cardBottom}>
-                                    <ThemedView style={styles.cardBottomLeft}>
-                                        <ThemedText style={styles.label}>{order.products.length} item{order.products.length > 1 ? "s" : ""}</ThemedText>
-                                        <ThemedView style={styles.dotSeparator} />
-                                        <ThemedText style={styles.label}>{TransformPrice(order.total_price)}</ThemedText>
-                                    </ThemedView>
-                                    {!SelectMode && (
-                                        <ThemedView style={styles.detailRow}>
-                                            <ThemedText style={styles.detailText}>Details</ThemedText>
-                                            <Arrow width={12} height={12} />
-                                        </ThemedView>
-                                    )}
-                                </ThemedView>
-                            </ThemedView>
-                        </ThemedView>
-                    </TouchableOpacity>
-                ))}
-
-                <ThemedView style={styles.footer}>
-                    <ThemedText style={styles.footerText}>You've reached the end</ThemedText>
-                </ThemedView>
-            </ScrollView>
-
+            <ThemedView style={[styles.scrollContent, SelectMode && styles.scrollContentSelectActive]}>
+                <FlatList
+                    renderItem={(order) => (
+                        <CardOrderComponent item={order.item} selectMode={SelectMode} selected={SelectedIdMaps.has(order.item.id)} onToggleSelect={handleToggleSelect} />
+                    )}
+                    contentContainerStyle={{ gap: 7, paddingBottom: SelectMode ? 150 : 110 }}
+                    data={TransactionCartList}
+                    extraData={{ SelectMode, SelectedIdMaps }}
+                    keyExtractor={(item) => item.id.toString()}
+                    onEndReached={() => handleGetData()}
+                    onEndReachedThreshold={0.5}
+                    showsVerticalScrollIndicator={false}
+                    ListFooterComponent={Loading && TransactionCartList.length > 0 ?
+                        <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 30, alignItems: "center", backgroundColor: "rgba(0, 0, 0, 0.05)" }}>
+                            <LottieView source={require("@/assets/json/loading.json")} autoPlay loop style={{ width: 100, height: 80, bottom: 15 }} />
+                        </View> : null
+                    }
+                />
+            </ThemedView>
             {SelectMode && (
                 <ThemedView style={styles.bottomBar}>
                     <TouchableOpacity style={styles.checkboxAreaSquare} onPress={handleSelectAll}>
@@ -121,3 +93,47 @@ export default function TransactionPage() {
         </View>
     );
 }
+
+// const styleus = StyleSheet.create({
+//     card: {
+//         height: 100,
+//         backgroundColor: '#FFF',
+//         padding: 20,
+//         marginVertical: 8,
+//         marginHorizontal: 16,
+//         borderRadius: 8,
+//         shadowColor: '#000',
+//         shadowOpacity: 0.1,
+//         shadowRadius: 4,
+//         elevation: 2,
+//     },
+//     cardTitle: {
+//         fontSize: 18,
+//         fontWeight: 'bold',
+//     },
+//     cardSubtitle: {
+//         color: '#666',
+//         marginTop: 4,
+//     },
+//     actionContainer: {
+//         flexDirection: 'row',
+//         width: 160, // Lebar total tombol
+//         marginVertical: 8, // Samakan dengan margin card
+//     },
+//     actionButton: {
+//         flex: 1,
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//     },
+//     editButton: {
+//         backgroundColor: '#3498db', // Warna biru untuk ubah
+//     },
+//     deleteButton: {
+//         backgroundColor: '#e74c3c', // Warna merah untuk delete
+//     },
+//     actionText: {
+//         color: '#FFF',
+//         fontWeight: 'bold',
+//         fontSize: 14,
+//     },
+// });

@@ -14,6 +14,21 @@ export const styles = StyleSheet.create({
         gap: 10,
         alignContent: "center",
     },
+    cardContainerSwipe: {
+        width: 60,
+        height: 125,
+        backgroundColor: "#E33434",
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
+        // paddingHorizontal: 10,
+        // paddingTop: 8,
+        // paddingBottom: 8,
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+        alignContent: "center",
+        justifyContent: 'center'
+    },
     content: {
         flex: 1,
         justifyContent: "space-between",
