@@ -10,3 +10,6 @@
 # code-style
 - Extract inline styles to separate `.styles.ts` files and import via `{ styles }`. Confidence: 0.80
 
+# react-native
+- Use `react-native-skeleton-placeholder` for skeleton loading states instead of custom skeleton components. Confidence: 0.70
+

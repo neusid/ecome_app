@@ -6,7 +6,8 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TransformPrice } from "@/constants/formater";
 import { router } from "expo-router";
-import { ActivityIndicator, ScrollView, TouchableOpacity, View } from "react-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import useTransactionPage from "../hooks/use_transaction_page";
 import { styles } from "./transaction_page.styles";
 
@@ -16,9 +17,43 @@ export default function TransactionPage() {
 
     if (Loading) {
         return (
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                <ActivityIndicator size="large" color="#61AD4E" />
-            </View>
+            <SkeletonPlaceholder borderRadius={8} speed={1200}>
+                <View style={{ flex: 1, backgroundColor: "#F5F7F9" }}>
+                    <View style={styles.header}>
+                        <View style={{ width: 36, height: 36, borderRadius: 12 }} />
+                        <View style={{ width: 120, height: 18, borderRadius: 4 }} />
+                        <View style={{ width: 36, height: 36, borderRadius: 12 }} />
+                    </View>
+
+                    <View style={styles.scrollContent}>
+                        {[1, 2, 3, 4].map((i) => (
+                            <View key={i} style={styles.card}>
+                                <View style={styles.cardContent}>
+                                    <View style={styles.cardTop}>
+                                        <View style={styles.cardTopLeft}>
+                                            <View style={{ width: 10, height: 10, borderRadius: 5 }} />
+                                            <View style={{ gap: 4 }}>
+                                                <View style={{ width: 160, height: 14 }} />
+                                                <View style={{ width: 80, height: 12 }} />
+                                            </View>
+                                        </View>
+                                        <View style={{ width: 80, height: 26, borderRadius: 8 }} />
+                                    </View>
+
+                                    <View style={styles.cardBottom}>
+                                        <View style={styles.cardBottomLeft}>
+                                            <View style={{ width: 120, height: 14 }} />
+                                            <View style={[styles.dotSeparator, { backgroundColor: "#E1E9EE" }]} />
+                                            <View style={{ width: 70, height: 14 }} />
+                                        </View>
+                                        <View style={{ width: 50, height: 14 }} />
+                                    </View>
+                                </View>
+                            </View>
+                        ))}
+                    </View>
+                </View>
+            </SkeletonPlaceholder>
         );
     }
 
