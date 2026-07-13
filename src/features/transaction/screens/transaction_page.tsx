@@ -7,9 +7,9 @@ import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import CardOrderComponent from "../components/card_order.component";
+import CardOrderShimmeringComponent from "../components/card_order_shimmer.component";
 import useTransactionPage from "../hooks/use_transaction_page";
 import { styles } from "./transaction_page.styles";
-
 // const renderRightActions = () => {
 //     return (
 //         <View style={styleus.actionContainer}>
@@ -38,34 +38,25 @@ export default function TransactionPage() {
                 </TouchableOpacity>
             </ThemedView>
 
-            {/* <Swipeable
-                renderRightActions={renderRightActions}
-                friction={1}
-                rightThreshold={20}
-                overshootRight={false}
-            >
-                <View style={{ backgroundColor: '#fff' }}>
-                    card content
-                </View></Swipeable> */}
-
             <ThemedView style={[styles.scrollContent, SelectMode && styles.scrollContentSelectActive]}>
-                <FlatList
-                    renderItem={(order) => (
-                        <CardOrderComponent item={order.item} selectMode={SelectMode} selected={SelectedIdMaps.has(order.item.id)} onToggleSelect={handleToggleSelect} onToggleDelete={handleDeleteSwipe} />
-                    )}
-                    contentContainerStyle={{ gap: 7, paddingBottom: SelectMode ? 150 : 110 }}
-                    data={TransactionCartList}
-                    extraData={{ SelectMode, SelectedIdMaps }}
-                    keyExtractor={(item) => item.id.toString()}
-                    onEndReached={() => handleGetData()}
-                    onEndReachedThreshold={0.5}
-                    showsVerticalScrollIndicator={false}
-                    ListFooterComponent={Loading && TransactionCartList.length > 0 ?
-                        <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 30, alignItems: "center", backgroundColor: "rgba(0, 0, 0, 0.05)" }}>
-                            <LottieView source={require("@/assets/json/loading.json")} autoPlay loop style={{ width: 100, height: 80, bottom: 15 }} />
-                        </View> : null
-                    }
-                />
+                {TransactionCartList.length > 0 ?
+                    <FlatList
+                        renderItem={(order) => (
+                            <CardOrderComponent item={order.item} selectMode={SelectMode} selected={SelectedIdMaps.has(order.item.id)} onToggleSelect={handleToggleSelect} onToggleDelete={handleDeleteSwipe} />
+                        )}
+                        contentContainerStyle={{ gap: 7, paddingBottom: SelectMode ? 150 : 110 }}
+                        data={TransactionCartList}
+                        extraData={{ SelectMode, SelectedIdMaps }}
+                        keyExtractor={(item) => item.id.toString()}
+                        onEndReached={() => handleGetData()}
+                        onEndReachedThreshold={0.5}
+                        showsVerticalScrollIndicator={false}
+                        ListFooterComponent={Loading && TransactionCartList.length > 0 ?
+                            <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 30, alignItems: "center", backgroundColor: "rgba(0, 0, 0, 0.05)" }}>
+                                <LottieView source={require("@/assets/json/loading.json")} autoPlay loop style={{ width: 100, height: 80, bottom: 15 }} />
+                            </View> : null
+                        }
+                    /> : Array.from({ length: 6 }).map((_, index) => (<CardOrderShimmeringComponent key={index} />))}
             </ThemedView>
             {SelectMode && (
                 <ThemedView style={styles.bottomBar}>
@@ -123,6 +114,8 @@ const styleus = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
     },
     editButton: {
         backgroundColor: '#3498db',

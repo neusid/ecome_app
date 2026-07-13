@@ -45,6 +45,7 @@ function CardOrderComponent({
             friction={1}
             rightThreshold={20}
             overshootRight={false}
+            containerStyle={{ borderTopRightRadius: 10, borderBottomRightRadius: 10 }}
         >
             <TouchableOpacity
                 activeOpacity={0.9}
@@ -125,7 +126,7 @@ const styleus = StyleSheet.create({
     },
     actionContainer: {
         flexDirection: 'row',
-        width: 100,
+        width: 70,
         marginVertical: 8,
     },
     actionButton: {
@@ -138,6 +139,8 @@ const styleus = StyleSheet.create({
     },
     deleteButton: {
         backgroundColor: '#e74c3c',
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10
     },
     actionText: {
         color: '#FFF',
