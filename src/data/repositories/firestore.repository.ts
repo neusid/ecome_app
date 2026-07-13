@@ -229,3 +229,10 @@ export const batchDeleteOrder = async (ids: string[]) => {
 
     await batch.commit();
 };
+
+export const deleteSingleOrder = async (id: string) => {
+    if (!id) return;
+
+    const docRef = doc(db, "orders", id);
+    await deleteDoc(docRef);
+};

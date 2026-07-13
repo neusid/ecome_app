@@ -5,7 +5,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import CardOrderComponent from "../components/card_order.component";
 import useTransactionPage from "../hooks/use_transaction_page";
 import { styles } from "./transaction_page.styles";
@@ -13,10 +13,6 @@ import { styles } from "./transaction_page.styles";
 // const renderRightActions = () => {
 //     return (
 //         <View style={styleus.actionContainer}>
-//             <RectButton style={[styleus.actionButton, styleus.editButton]} onPress={() => true}>
-//                 <Text style={styleus.actionText}>Ubah</Text>
-//             </RectButton>
-
 //             <RectButton style={[styleus.actionButton, styleus.deleteButton]} onPress={() => true}>
 //                 <Text style={styleus.actionText}>Hapus</Text>
 //             </RectButton>
@@ -26,7 +22,7 @@ import { styles } from "./transaction_page.styles";
 
 export default function TransactionPage() {
 
-    const { TransactionCartList, Loading, SelectMode, SelectedIdMaps, isAllSelected, toggleSelectMode, handleToggleSelect, handleSelectAll, handleDeleteSelected, handleGetData } = useTransactionPage();
+    const { TransactionCartList, Loading, SelectMode, SelectedIdMaps, isAllSelected, toggleSelectMode, handleToggleSelect, handleSelectAll, handleDeleteSelected, handleGetData, handleDeleteSwipe } = useTransactionPage();
 
     return (
         <View style={styles.body}>
@@ -42,17 +38,20 @@ export default function TransactionPage() {
                 </TouchableOpacity>
             </ThemedView>
 
-            {/* <ReanimatedSwipeable containerStyle={{ height: 80 }} renderRightActions={renderRightActions}>
-                <View style={styleus.card}>
-                    <Text style={styleus.cardTitle}>This tittle</Text>
-                    <Text style={styleus.cardSubtitle}>this description</Text>
-                </View>
-            </ReanimatedSwipeable> */}
+            {/* <Swipeable
+                renderRightActions={renderRightActions}
+                friction={1}
+                rightThreshold={20}
+                overshootRight={false}
+            >
+                <View style={{ backgroundColor: '#fff' }}>
+                    card content
+                </View></Swipeable> */}
 
             <ThemedView style={[styles.scrollContent, SelectMode && styles.scrollContentSelectActive]}>
                 <FlatList
                     renderItem={(order) => (
-                        <CardOrderComponent item={order.item} selectMode={SelectMode} selected={SelectedIdMaps.has(order.item.id)} onToggleSelect={handleToggleSelect} />
+                        <CardOrderComponent item={order.item} selectMode={SelectMode} selected={SelectedIdMaps.has(order.item.id)} onToggleSelect={handleToggleSelect} onToggleDelete={handleDeleteSwipe} />
                     )}
                     contentContainerStyle={{ gap: 7, paddingBottom: SelectMode ? 150 : 110 }}
                     data={TransactionCartList}
@@ -94,46 +93,46 @@ export default function TransactionPage() {
     );
 }
 
-// const styleus = StyleSheet.create({
-//     card: {
-//         height: 100,
-//         backgroundColor: '#FFF',
-//         padding: 20,
-//         marginVertical: 8,
-//         marginHorizontal: 16,
-//         borderRadius: 8,
-//         shadowColor: '#000',
-//         shadowOpacity: 0.1,
-//         shadowRadius: 4,
-//         elevation: 2,
-//     },
-//     cardTitle: {
-//         fontSize: 18,
-//         fontWeight: 'bold',
-//     },
-//     cardSubtitle: {
-//         color: '#666',
-//         marginTop: 4,
-//     },
-//     actionContainer: {
-//         flexDirection: 'row',
-//         width: 160, // Lebar total tombol
-//         marginVertical: 8, // Samakan dengan margin card
-//     },
-//     actionButton: {
-//         flex: 1,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//     },
-//     editButton: {
-//         backgroundColor: '#3498db', // Warna biru untuk ubah
-//     },
-//     deleteButton: {
-//         backgroundColor: '#e74c3c', // Warna merah untuk delete
-//     },
-//     actionText: {
-//         color: '#FFF',
-//         fontWeight: 'bold',
-//         fontSize: 14,
-//     },
-// });
+const styleus = StyleSheet.create({
+    card: {
+        height: 100,
+        backgroundColor: '#FFF',
+        padding: 20,
+        marginVertical: 8,
+        marginHorizontal: 16,
+        borderRadius: 8,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    cardTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    cardSubtitle: {
+        color: '#666',
+        marginTop: 4,
+    },
+    actionContainer: {
+        flexDirection: 'row',
+        width: 160,
+        marginVertical: 8,
+    },
+    actionButton: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    editButton: {
+        backgroundColor: '#3498db',
+    },
+    deleteButton: {
+        backgroundColor: '#e74c3c',
+    },
+    actionText: {
+        color: '#FFF',
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
+});

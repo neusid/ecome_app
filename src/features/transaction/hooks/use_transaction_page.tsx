@@ -1,4 +1,4 @@
-import { GetOrder, batchDeleteOrder } from "@/data/repositories/firestore.repository";
+import { GetOrder, batchDeleteOrder, deleteSingleOrder } from "@/data/repositories/firestore.repository";
 import { Orders } from "@/domain/entities/orders_entities";
 import { useAuthStore } from "@/stores/authStore";
 import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
@@ -88,6 +88,22 @@ function useTransactionPage() {
         handleGetData();
     }, [Uid, SelectedIdMaps, handleGetData]);
 
+    const handleDeleteSwipe = useCallback(async (id: string) => {
+        if (!Uid) return;
+
+        try {
+            setLoading(true);
+            await deleteSingleOrder(id);
+            setTransactionCartList((prev) =>
+                prev.filter((item) => item.id !== id)
+            );
+        } catch (error) {
+            console.error("Gagal menghapus order:", error);
+        } finally {
+            setLoading(false);
+        }
+    }, [Uid]);
+
     return {
         TransactionCartList,
         Loading,
@@ -98,7 +114,8 @@ function useTransactionPage() {
         handleToggleSelect,
         handleSelectAll,
         handleDeleteSelected,
-        handleGetData
+        handleGetData,
+        handleDeleteSwipe
     };
 }
 
