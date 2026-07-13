@@ -7,6 +7,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 
 import CartComponent from "@/features/cart/components/cart-component";
+import CartComponentShimmer from "@/features/cart/components/cart-component-shimmer";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import { ScrollView, TouchableOpacity, View } from "react-native";
@@ -15,13 +16,10 @@ import { styles } from "./cart_page.styles";
 
 export default function CartPage() {
 
-    const { Uid, CartList, totalPrice, handleCheckout, handleLocalIncrease, handleLocalDecrease, TransformPrice, selectMode, selectedIds, isAllSelected, toggleSelectMode, handleToggleSelect, handleSelectAll, handleDeleteSelected, Loading, handleDeleteSingle } = useCartPage();
+    const { Uid, CartList, totalPrice, handleCheckout, handleLocalIncrease, handleLocalDecrease, TransformPrice, selectMode, selectedIds, isAllSelected, toggleSelectMode, handleToggleSelect, handleSelectAll, handleDeleteSelected, Loading, handleDeleteSingle, InitialLoading, DeleteLoading } = useCartPage();
 
     return (
         <ThemedView style={styles.container}>
-            {Loading ? <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 30, zIndex: 1, justifyContent: 'center', alignItems: "center", backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
-                <LottieView source={require("@/assets/json/loading.json")} autoPlay loop style={{ width: 100, height: 80, bottom: 15 }} />
-            </View> : null}
             <ThemedView style={styles.header}>
                 <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
                     <Arrow width={20} height={20} style={styles.backArrow} />
@@ -39,7 +37,11 @@ export default function CartPage() {
             <ThemedView style={styles.scrollViewContainer}>
                 <ScrollView style={selectMode ? styles.scrollViewDelete : styles.scrollView} showsVerticalScrollIndicator={false}>
                     <ThemedView style={styles.cartItemsContainer}>
-                        {CartList.map((cart) => (
+                        {InitialLoading ? <View style={{ height: 550, justifyContent: "center", alignItems: "center", }} >
+                            <LottieView source={require("@/assets/json/loading.json")} autoPlay loop style={{ width: 100, height: 80, }} />
+                        </View> : DeleteLoading ? Array.from({ length: CartList.length }).map((_, index) => (
+                            <CartComponentShimmer />
+                        )) : CartList.map((cart) => (
                             <CartComponent
                                 key={Math.random()}
                                 id={cart.id}
@@ -56,8 +58,10 @@ export default function CartPage() {
                                 onToggleSelect={selectMode ? handleToggleSelect : undefined}
                                 selectMode={selectMode}
                                 onDelete={handleDeleteSingle}
+                                deleteLoading={DeleteLoading}
                             />
                         ))}
+
                     </ThemedView>
                 </ScrollView>
             </ThemedView>

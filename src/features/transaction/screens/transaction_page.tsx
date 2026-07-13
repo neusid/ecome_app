@@ -22,7 +22,7 @@ import { styles } from "./transaction_page.styles";
 
 export default function TransactionPage() {
 
-    const { TransactionCartList, Loading, SelectMode, SelectedIdMaps, isAllSelected, toggleSelectMode, handleToggleSelect, handleSelectAll, handleDeleteSelected, handleGetData, handleDeleteSwipe } = useTransactionPage();
+    const { TransactionCartList, InitialLoading, PaginationLoading, DeleteLoading, SelectMode, SelectedIdMaps, isAllSelected, toggleSelectMode, handleToggleSelect, handleSelectAll, handleDeleteSelected, handleGetData, handleDeleteSwipe } = useTransactionPage();
 
     return (
         <View style={styles.body}>
@@ -38,25 +38,45 @@ export default function TransactionPage() {
                 </TouchableOpacity>
             </ThemedView>
 
-            <ThemedView style={[styles.scrollContent, SelectMode && styles.scrollContentSelectActive]}>
-                {TransactionCartList.length > 0 ?
+            <ThemedView
+                style={[styles.scrollContent, SelectMode && styles.scrollContentSelectActive]}
+            >
+                {InitialLoading || DeleteLoading ? (
+                    Array.from({ length: TransactionCartList.length > 0 ? TransactionCartList.length : 6 }).map((_, index) => (
+                        <CardOrderShimmeringComponent key={index} />
+                    ))
+                ) : TransactionCartList.length > 0 ? (
                     <FlatList
-                        renderItem={(order) => (
-                            <CardOrderComponent item={order.item} selectMode={SelectMode} selected={SelectedIdMaps.has(order.item.id)} onToggleSelect={handleToggleSelect} onToggleDelete={handleDeleteSwipe} />
-                        )}
-                        contentContainerStyle={{ gap: 7, paddingBottom: SelectMode ? 150 : 110 }}
                         data={TransactionCartList}
-                        extraData={{ SelectMode, SelectedIdMaps }}
                         keyExtractor={(item) => item.id.toString()}
-                        onEndReached={() => handleGetData()}
+                        renderItem={({ item }) => (
+                            <CardOrderComponent
+                                item={item}
+                                selectMode={SelectMode}
+                                selected={SelectedIdMaps.has(item.id)}
+                                onToggleSelect={handleToggleSelect}
+                                onToggleDelete={handleDeleteSwipe}
+                            />
+                        )}
+                        extraData={{ SelectMode, SelectedIdMaps, DeleteLoading }}
+                        contentContainerStyle={{
+                            gap: 7,
+                            paddingBottom: SelectMode ? 150 : 110,
+                        }}
+                        onEndReached={handleGetData}
                         onEndReachedThreshold={0.5}
                         showsVerticalScrollIndicator={false}
-                        ListFooterComponent={Loading && TransactionCartList.length > 0 ?
-                            <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 30, alignItems: "center", backgroundColor: "rgba(0, 0, 0, 0.05)" }}>
-                                <LottieView source={require("@/assets/json/loading.json")} autoPlay loop style={{ width: 100, height: 80, bottom: 15 }} />
-                            </View> : null
+                        ListFooterComponent={
+                            PaginationLoading ? (
+                                <View style={{ height: 80, justifyContent: "center", alignItems: "center", }} >
+                                    <LottieView source={require("@/assets/json/loading.json")} autoPlay loop style={{ width: 100, height: 80, }} />
+                                </View>
+                            ) : null
                         }
-                    /> : Array.from({ length: 6 }).map((_, index) => (<CardOrderShimmeringComponent key={index} />))}
+                    />
+                ) : (
+                    <ThemedText>Tidak ada order</ThemedText>
+                )}
             </ThemedView>
             {SelectMode && (
                 <ThemedView style={styles.bottomBar}>

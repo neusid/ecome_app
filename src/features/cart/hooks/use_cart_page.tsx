@@ -10,6 +10,8 @@ import { formatCurrency } from "react-native-format-currency";
 function useCartPage() {
 
     const [Loading, setLoading] = useState<boolean>(false);
+    const [InitialLoading, setInitialLoading] = useState<boolean>(false);
+    const [DeleteLoading, setDeleteLoading] = useState<boolean>(false);
     const [CartList, setCartList] = useState<ProductCartEntities[]>([]);
     const [selectMode, setSelectMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -38,8 +40,10 @@ function useCartPage() {
     };
 
     const fetchCart = async (uid: string) => {
+        setInitialLoading(true);
         const data = await GetCart(uid);
         setCartList(data);
+        setInitialLoading(false);
     };
 
     const handleCheckout = async () => {
@@ -82,7 +86,7 @@ function useCartPage() {
 
     const handleDeleteSingle = async (id: string) => {
 
-        setLoading(true);
+        setDeleteLoading(true);
 
         if (!Uid) return;
         console.log("Clicked!");
@@ -90,13 +94,13 @@ function useCartPage() {
         await deleteSingleCart(id);
         await fetchCart(Uid);
 
-        setLoading(false);
+        setDeleteLoading(false);
     }
 
     const handleDeleteSelected = async () => {
         if (!Uid || selectedIds.size === 0) return;
 
-        setLoading(true);
+        setDeleteLoading(true);
 
         const ids = Array.from(selectedIds);
         await batchDeleteCart(ids);
@@ -105,7 +109,7 @@ function useCartPage() {
         setSelectMode(false);
         await fetchCart(Uid);
 
-        setLoading(false);
+        setDeleteLoading(false);
     };
 
     const syncToFirestore = useMemo(
@@ -197,6 +201,8 @@ function useCartPage() {
         handleDeleteSelected,
         Loading,
         handleDeleteSingle,
+        InitialLoading,
+        DeleteLoading
     }
 }
 
