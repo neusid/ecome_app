@@ -167,8 +167,10 @@ function useCartPage() {
         if (!item) return;
 
         if (item.quantity <= 1) {
+            setDeleteLoading(true);
             queueUpdate(cartId, 0);
             setCartList((prev) => prev.filter((i) => i.id !== cartId));
+            setDeleteLoading(false);
             return;
         }
 

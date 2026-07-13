@@ -4,6 +4,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import styles from "@/features/all_product/screens/all_product_page.style";
 import ProductCard from "@/features/home/components/product_card";
+import ProductCardComponentShimmer from "@/features/home/components/product_card_component_shimmer";
 import { router } from "expo-router";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import useAllProduct from "../hooks/use_all_product";
@@ -34,18 +35,22 @@ function AllProductPage() {
                                 </TouchableOpacity>
                             </ThemedView>
                             <ThemedView style={styles.FlashSaleRow}>
-                                {ProductListAxios?.map((data) => (
-                                    <ProductCard
-                                        key={data.id}
-                                        id={data.id}
-                                        title={data.title}
-                                        price={data.price}
-                                        description={data.description}
-                                        category={data.category}
-                                        image={data.image}
-                                        rating={data.rating}
-                                    />
-                                ))}
+                                {ProductListAxios.length < 1 ?
+                                    Array.from({ length: 6 }).map((_, index) => (<ProductCardComponentShimmer key={index} />)) :
+                                    ProductListAxios?.map((data) => (
+                                        <ProductCard
+                                            key={data.id}
+                                            id={data.id}
+                                            title={data.title}
+                                            price={data.price}
+                                            description={data.description}
+                                            category={data.category}
+                                            image={data.image}
+                                            rating={data.rating}
+                                        />
+                                    ))
+
+                                }
                             </ThemedView>
                         </ThemedView>
                     </ThemedView>

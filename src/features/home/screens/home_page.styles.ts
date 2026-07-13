@@ -52,7 +52,8 @@ export const styles = StyleSheet.create({
     CategorySection: {
         marginHorizontal: 16,
         marginBottom: 30,
-        marginTop: -45
+        marginTop: -45,
+        gap: 10
     },
     CategoryRow: {
         flexDirection: 'row',
@@ -111,4 +112,7 @@ export const styles = StyleSheet.create({
         alignContent: 'center',
         marginBottom: 20
     },
+    title: {
+        fontSize: 12,
+    }
 });

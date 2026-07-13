@@ -39,9 +39,8 @@ function CardOrderComponent({
     };
 
     return (
-
         <Swipeable
-            renderRightActions={renderRightActions}
+            renderRightActions={selectMode ? () => false : renderRightActions}
             friction={1}
             rightThreshold={20}
             overshootRight={false}
