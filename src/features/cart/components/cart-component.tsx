@@ -26,7 +26,6 @@ export default function CartComponent(product: ProductCardComponentProps) {
         return (<Pressable style={styles.cardContainerSwipe} onPress={
             () => {
                 product.onDelete?.(product.id);
-
             }
         }>
             <Delete fill="#fff" />
@@ -44,14 +43,7 @@ export default function CartComponent(product: ProductCardComponentProps) {
                             )}
                         </View>
                     )}
-                    <ThemedView
-                        style={{
-                            borderTopLeftRadius: 2,
-                            borderBottomLeftRadius: 2,
-                            overflow: "hidden",
-                            paddingLeft: 10,
-                        }}
-                    >
+                    <ThemedView style={{ borderTopLeftRadius: 2, borderBottomLeftRadius: 2, overflow: "hidden", paddingLeft: 10, }} >
                         <Image source={{ uri: product.image }} resizeMode='cover' style={{ width: 100, height: 100, borderRadius: 10 }} />
                     </ThemedView>
 

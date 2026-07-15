@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
         height: 125,
         backgroundColor: "#fff",
         borderRadius: 10,
-        padding: 12,
+        paddingVertical: 12,
         flexDirection: "row",
         alignItems: "center",
         gap: 10,
@@ -16,10 +16,7 @@ export const styles = StyleSheet.create({
         width: 60,
         height: 125,
         backgroundColor: "#E33434",
-        padding: 10,
-        // paddingHorizontal: 10,
-        // paddingTop: 8,
-        // paddingBottom: 8,
+        paddingVertical: 0,
         flexDirection: "row",
         alignItems: "center",
         gap: 10,
@@ -28,7 +25,7 @@ export const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        justifyContent: "space-between",
+        justifyContent: "center",
         height: "100%",
         backgroundColor: 'transparent',
         padding: 12
@@ -136,6 +133,7 @@ export const styles = StyleSheet.create({
         backgroundColor: "#E33434",
         justifyContent: "center",
         alignItems: "center",
+
     },
     checkboxSquare: {
         width: 22,
