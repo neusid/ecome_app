@@ -1,2 +1,2 @@
-export { default } from "@/features/auth/screens/login_page";
+export { default } from "@/features/auth/screens/login.screen";
 

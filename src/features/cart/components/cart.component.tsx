@@ -5,7 +5,7 @@ import type { ProductCardComponentProps } from "@/domain/entities/product_card_e
 import { Image, Pressable, TouchableOpacity, View } from "react-native";
 import { formatCurrency } from "react-native-format-currency";
 import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeable";
-import { styles } from "./cart-component.styles";
+import { styles } from "./cart.style";
 
 import Check from "@/assets/expo.icon/Assets/check.svg";
 
@@ -33,7 +33,7 @@ export default function CartComponent(product: ProductCardComponentProps) {
     }
 
     return (
-        <ReanimatedSwipeable renderRightActions={product.onToggleSelect ? () => null : RenderRightAction} containerStyle={{ backgroundColor: "#E33434", borderRadius: 10 }}>
+        <ReanimatedSwipeable renderRightActions={product.onToggleSelect ? () => null : RenderRightAction} containerStyle={styles.swipeContainer}>
             <Pressable onPress={() => product.onToggleSelect?.(product.id)}>
                 <ThemedView style={[styles.cardContainer, styles.shadow]}>
                     {product.onToggleSelect && (
@@ -43,8 +43,8 @@ export default function CartComponent(product: ProductCardComponentProps) {
                             )}
                         </View>
                     )}
-                    <ThemedView style={{ borderTopLeftRadius: 2, borderBottomLeftRadius: 2, overflow: "hidden", paddingLeft: 10, }} >
-                        <Image source={{ uri: product.image }} resizeMode='cover' style={{ width: 100, height: 100, borderRadius: 10 }} />
+                    <ThemedView style={styles.imageWrapper} >
+                        <Image source={{ uri: product.image }} resizeMode='cover' style={styles.productImage} />
                     </ThemedView>
 
                     <ThemedView style={styles.content}>

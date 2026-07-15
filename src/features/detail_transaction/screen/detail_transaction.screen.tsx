@@ -4,12 +4,12 @@ import Ticket from "@/assets/expo.icon/Assets/ticket.svg"
 import { ThemedText } from '@/components/themed-text'
 import { ThemedView } from '@/components/themed-view'
 import { TransformPrice } from '@/constants/formater'
-import CartComponentShimmer from "@/features/cart/components/cart-component-shimmer"
-import useDetailTransactionPage from "@/features/detail_transaction/hooks/use_detail_transaction_page"
-import styles from "@/features/detail_transaction/screen/detail_transaction.styles"
+import CartComponentShimmer from "@/features/cart/components/cart_shimmer.component"
+import useDetailTransactionPage from "@/features/detail_transaction/hooks/detail_transaction.hook"
+import styles from "@/features/detail_transaction/screen/detail_transaction.style"
 import { router } from "expo-router"
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from 'react-native'
-import OrderComponent from "../components/order_component"
+import OrderComponent from "../components/order.component"
 
 
 export default function DetailTransaction() {

@@ -8,7 +8,7 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { Image, Pressable, View } from 'react-native';
 import { formatCurrency } from 'react-native-format-currency';
-import { styles } from './product_card.styles';
+import { styles } from './product_card.style';
 
 type ProductCardProps = ProductEntities & {
     onIncrease?: (id: string) => void;

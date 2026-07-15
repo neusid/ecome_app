@@ -2,12 +2,12 @@ import Arrow from "@/assets/expo.icon/Assets/arrow.svg";
 import HistorySvg from "@/assets/expo.icon/Assets/history.svg";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import styles from "@/features/all_product/screens/all_product_page.style";
-import ProductCard from "@/features/home/components/product_card";
-import ProductCardComponentShimmer from "@/features/home/components/product_card_component_shimmer";
+import styles from "@/features/all_product/screens/all_product.style";
+import ProductCard from "@/features/home/components/product_card.component";
+import ProductCardComponentShimmer from "@/features/home/components/product_card_shimmer.component";
 import { router } from "expo-router";
 import { ScrollView, TouchableOpacity, View } from "react-native";
-import useAllProduct from "../hooks/use_all_product";
+import useAllProduct from "../hooks/all_product.hook";
 
 function AllProductPage() {
 

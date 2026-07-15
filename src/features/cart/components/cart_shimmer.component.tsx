@@ -1,7 +1,7 @@
 import { ThemedView } from "@/components/themed-view";
 import { LinearGradient as Linear } from 'expo-linear-gradient';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
-import { styles } from "./cart-component.styles";
+import { styles } from "./cart.style";
 
 
 

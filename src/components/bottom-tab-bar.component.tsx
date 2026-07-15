@@ -4,8 +4,8 @@ import BoxIcon from "@/assets/expo.icon/Assets/home-alt.svg";
 import { router, usePathname } from "expo-router";
 import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTheme } from "../hooks/use-theme";
-import { styles } from "./bottom-tab-bar.styles";
+import { useTheme } from "../hooks/theme.hook";
+import { styles } from "./bottom-tab-bar.style";
 
 const TABS = [
   { name: "/home" as const, label: "Home", icon: BoxIcon },

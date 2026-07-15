@@ -1,5 +1,5 @@
 import { ThemedView } from "@/components/themed-view";
-import { styles } from "@/features/home/components/product_card_component_shimmer.style";
+import { styles } from "@/features/home/components/product_card_shimmer.style";
 import { LinearGradient as Linear } from 'expo-linear-gradient';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 

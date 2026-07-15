@@ -12,9 +12,9 @@ import { useCheckCart } from "@/stores/checkCartStore";
 import { router } from "expo-router";
 import { useEffect, useRef } from "react";
 import { ActivityIndicator, Animated, Image, ScrollView, TouchableOpacity, View } from "react-native";
-import DetailShimmering from "../components/detail_shimmering";
-import useDetailPage from "../hooks/use_detail_page";
-import { styles } from "./detail_page.styles";
+import DetailShimmering from "../components/detail_shimmering.component";
+import useDetailPage from "../hooks/detail.hook";
+import { styles } from "./detail.style";
 
 export default function DetailPage() {
 

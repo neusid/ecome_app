@@ -10,7 +10,7 @@ import { router } from 'expo-router';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { RectButton } from "react-native-gesture-handler";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { styles } from "../screens/transaction_page.styles";
+import { styles } from "../screens/transaction.style";
 
 interface Props {
     item: Orders;

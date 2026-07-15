@@ -6,17 +6,17 @@ import Ticket from "@/assets/expo.icon/Assets/ticket.svg";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 
-import CartComponent from "@/features/cart/components/cart-component";
-import CartComponentShimmer from "@/features/cart/components/cart-component-shimmer";
+import CartComponent from "@/features/cart/components/cart.component";
+import CartComponentShimmer from "@/features/cart/components/cart_shimmer.component";
 import { router } from "expo-router";
 import LottieView from "lottie-react-native";
 import { ScrollView, TouchableOpacity, View } from "react-native";
-import useCartPage from "../hooks/use_cart_page";
-import { styles } from "./cart_page.styles";
+import useCartPage from "../hooks/cart.hook";
+import { styles } from "./cart.style";
 
 export default function CartPage() {
 
-    const { Uid, CartList, totalPrice, handleCheckout, handleLocalIncrease, handleLocalDecrease, TransformPrice, selectMode, selectedIds, isAllSelected, toggleSelectMode, handleToggleSelect, handleSelectAll, handleDeleteSelected, Loading, handleDeleteSingle, InitialLoading, DeleteLoading } = useCartPage();
+    const { CartList, totalPrice, handleCheckout, handleLocalIncrease, handleLocalDecrease, TransformPrice, selectMode, selectedIds, isAllSelected, toggleSelectMode, handleToggleSelect, handleSelectAll, handleDeleteSelected, Loading, handleDeleteSingle, InitialLoading, DeleteLoading } = useCartPage();
 
     return (
         <ThemedView style={styles.container}>

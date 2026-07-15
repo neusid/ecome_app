@@ -7,10 +7,10 @@ import { router } from "expo-router";
 import { Image, Pressable, ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "../../../components/themed-text";
 import { ThemedView } from "../../../components/themed-view";
-import ProductCard from "../components/product_card";
-import ProductCardComponentShimmer from "../components/product_card_component_shimmer";
-import useHomePage from "../hooks/use_home_page";
-import { styles } from "./home_page.styles";
+import ProductCard from "../components/product_card.component";
+import ProductCardComponentShimmer from "../components/product_card_shimmer.component";
+import useHomePage from "../hooks/home.hook";
+import { styles } from "./home.style";
 
 const { cardImage } = styles;
 

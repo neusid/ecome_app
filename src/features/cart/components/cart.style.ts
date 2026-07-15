@@ -154,4 +154,8 @@ export const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: "700",
     },
+    swipeContainer: {
+        backgroundColor: "#E33434",
+        borderRadius: 10,
+    },
 });

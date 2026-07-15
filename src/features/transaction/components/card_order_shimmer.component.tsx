@@ -1,7 +1,7 @@
 import { LinearGradient as Linear } from 'expo-linear-gradient';
 import { View } from 'react-native';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
-import { shimmerStyles } from './card_order_shimmer.styles';
+import { shimmerStyles } from './card_order_shimmer.style';
 
 function CardOrderShimmeringComponent() {
 

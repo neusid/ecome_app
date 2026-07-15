@@ -8,8 +8,8 @@ import LottieView from "lottie-react-native";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import CardOrderComponent from "../components/card_order.component";
 import CardOrderShimmeringComponent from "../components/card_order_shimmer.component";
-import useTransactionPage from "../hooks/use_transaction_page";
-import { styles } from "./transaction_page.styles";
+import useTransactionPage from "../hooks/transaction.hook";
+import { styles } from "./transaction.style";
 // const renderRightActions = () => {
 //     return (
 //         <View style={styleus.actionContainer}>

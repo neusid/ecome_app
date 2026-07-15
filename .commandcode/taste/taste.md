@@ -10,6 +10,7 @@
 
 # code-style
 - Extract inline styles to separate `.styles.ts` files and import via `{ styles }`. Confidence: 0.80
+- Use naming convention: `name.screen.tsx`, `name.component.tsx`, `name.hook.ts`, `name.style.ts`. Confidence: 0.70
 
 # navigation
 - For bottom tab navigation: only show the bottom tab bar on the home page, not on other tab screens. Confidence: 0.70

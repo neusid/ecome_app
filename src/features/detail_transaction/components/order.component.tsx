@@ -3,7 +3,7 @@ import { ThemedView } from "@/components/themed-view";
 import type { ProductCardComponentProps } from "@/domain/entities/product_card_entities";
 import { Image } from "react-native";
 import { formatCurrency } from "react-native-format-currency";
-import { styles } from "./order_component.style";
+import { styles } from "./order.style";
 
 export default function OrderComponent(product: ProductCardComponentProps) {
 
