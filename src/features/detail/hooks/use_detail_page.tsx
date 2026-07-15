@@ -3,8 +3,8 @@ import { ProductRepositoriesImpl } from "@/data/repositories/product/product_rep
 import { ProductEntities } from "@/domain/entities/product_entities";
 import { useAuthStore } from "@/stores/authStore";
 import { useCheckCart } from "@/stores/checkCartStore";
-import { useFocusEffect } from "expo-router/react-navigation";
 import { useLocalSearchParams } from "expo-router";
+import { useFocusEffect } from "expo-router/react-navigation";
 import { useCallback, useEffect, useState } from "react";
 import { formatCurrency } from "react-native-format-currency";
 
@@ -17,6 +17,7 @@ function useDetailPage() {
     const [loading, setLoading] = useState(true);
     const [adding, setAdding] = useState(false);
     const [Counts, setCounts] = useState<number>(0);
+
 
     const [withSymbol] = formatCurrency({
         amount: Number(DetailProduct?.price),
@@ -57,12 +58,12 @@ function useDetailPage() {
         const response = await repositories.fetchSingleData(id);
         setDetailProduct(response);
         checkSingleProduct();
-        setLoading(false);
     };
 
     return {
         Uid,
         loading,
+        setLoading,
         adding,
         withSymbol,
         setAdding,

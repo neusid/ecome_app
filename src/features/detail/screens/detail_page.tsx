@@ -10,25 +10,43 @@ import { addToCart } from "@/data/repositories/firestore.repository";
 import { useCartStore } from "@/stores/cartStore";
 import { useCheckCart } from "@/stores/checkCartStore";
 import { router } from "expo-router";
-import { ActivityIndicator, Image, ScrollView, TouchableOpacity, View } from "react-native";
+import { useEffect, useRef } from "react";
+import { ActivityIndicator, Animated, Image, ScrollView, TouchableOpacity, View } from "react-native";
+import DetailShimmering from "../components/detail_shimmering";
 import useDetailPage from "../hooks/use_detail_page";
 import { styles } from "./detail_page.styles";
 
 export default function DetailPage() {
 
-    const { Uid, loading, adding, withSymbol, setAdding, DetailProduct, checkSingleProduct } = useDetailPage();
+    const { Uid, loading, adding, withSymbol, setAdding, DetailProduct, checkSingleProduct, setLoading } = useDetailPage();
 
     const count = useCartStore((s) => s.count);
     const setCount = useCartStore((s) => s.setCount);
     const check = useCheckCart((s) => s.check);
 
-    if (loading) {
-        return (
-            <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#61AD4E" />
-            </View>
-        );
-    }
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const scaleAnim = useRef(new Animated.Value(0.8)).current;
+
+    useEffect(() => {
+        Animated.parallel([
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 600,
+                useNativeDriver: true,
+            }),
+            Animated.timing(scaleAnim, {
+                toValue: 1,
+                duration: 600,
+                useNativeDriver: true,
+            })
+        ]).start();
+
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -42,30 +60,32 @@ export default function DetailPage() {
                 </ThemedView>
             </ThemedView>
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} >
-                <ThemedView style={styles.body}>
-                    <ThemedView style={styles.productCard}>
-                        <ThemedView style={styles.productSubContainer}>
-                            <Image source={{ uri: DetailProduct?.image }} style={styles.productImage} />
-                            <ThemedView style={styles.titleRow}>
-                                <ThemedText style={styles.titleText} numberOfLines={2}>{DetailProduct?.title}</ThemedText>
-                                <PromoChip />
-                            </ThemedView>
-                            <ThemedText style={styles.priceText}>{withSymbol}</ThemedText>
-                            <BottomChip width={'100%'} />
-                        </ThemedView>
-                    </ThemedView>
-                    <ThemedView style={styles.descriptionSection}>
-                        <ThemedView style={styles.descriptionHeader}>
-                            <ThemedText style={styles.descriptionTitle}>Description</ThemedText>
-                            <ThemedView style={styles.ratingRow}>
-                                <Star />
-                                <ThemedText style={styles.ratingText}>{DetailProduct?.rating.rate}</ThemedText>
-                                <ThemedText style={styles.ratingCount}>({DetailProduct?.rating.count})</ThemedText>
+                {loading ? <DetailShimmering /> : <Animated.View>
+                    <ThemedView style={styles.body}>
+                        <ThemedView style={styles.productCard}>
+                            <ThemedView style={styles.productSubContainer}>
+                                <Image source={{ uri: DetailProduct?.image }} style={styles.productImage} />
+                                <ThemedView style={styles.titleRow}>
+                                    <ThemedText style={styles.titleText} numberOfLines={2}>{DetailProduct?.title}</ThemedText>
+                                    <PromoChip />
+                                </ThemedView>
+                                <ThemedText style={styles.priceText}>{withSymbol}</ThemedText>
+                                <BottomChip width={'100%'} />
                             </ThemedView>
                         </ThemedView>
-                        <ThemedText style={styles.descriptionText}>{DetailProduct?.description}</ThemedText>
-                    </ThemedView>
-                </ThemedView >
+                        <ThemedView style={styles.descriptionSection}>
+                            <ThemedView style={styles.descriptionHeader}>
+                                <ThemedText style={styles.descriptionTitle}>Description</ThemedText>
+                                <ThemedView style={styles.ratingRow}>
+                                    <Star />
+                                    <ThemedText style={styles.ratingText}>{DetailProduct?.rating.rate}</ThemedText>
+                                    <ThemedText style={styles.ratingCount}>({DetailProduct?.rating.count})</ThemedText>
+                                </ThemedView>
+                            </ThemedView>
+                            <ThemedText style={styles.descriptionText}>{DetailProduct?.description}</ThemedText>
+                        </ThemedView>
+                    </ThemedView >
+                </Animated.View>}
             </ScrollView>
             {check ? (<ThemedView style={styles.addToCartContainer}>
                 <TouchableOpacity
