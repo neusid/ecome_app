@@ -6,6 +6,17 @@ export const styles = StyleSheet.create({
         height: 125,
         backgroundColor: "#fff",
         borderRadius: 10,
+        padding: 12,
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+        alignContent: "center",
+    },
+    cardContainerSwipe: {
+        width: 60,
+        height: 125,
+        backgroundColor: "#E33434",
+        padding: 10,
         // paddingHorizontal: 10,
         // paddingTop: 8,
         // paddingBottom: 8,
@@ -13,6 +24,7 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         gap: 10,
         alignContent: "center",
+        justifyContent: 'center'
     },
     content: {
         flex: 1,

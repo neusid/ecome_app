@@ -100,24 +100,3 @@ export default function DetailPage() {
         </View>
     )
 }
-//                  {adding ? (
-//                         <ActivityIndicator size="small" color="#fff" />
-//                     ) : (
-//                         <ThemedText style={{ color: "#fff", fontSize: 14 }}>
-//                             Add to Cart
-//                         </ThemedText>
-//                     )}
-//                 </TouchableOpacity>
-//             </ThemedView>) : (<></>)}
-//             <TouchableOpacity
-//                 style={styleDetailPage.fab}
-//                 onPress={() => router.push('/cart')}
-//             >
-//                 <ThemedView style={styleDetailPage.fabNotification}>
-//                     <ThemedText style={styleDetailPage.fabNotificationText}>{count}</ThemedText>
-//                 </ThemedView>
-//                 <Checkout />
-//             </TouchableOpacity>
-//         </View>
-//     )
-// }

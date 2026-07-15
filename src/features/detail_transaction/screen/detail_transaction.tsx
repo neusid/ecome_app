@@ -4,6 +4,7 @@ import Ticket from "@/assets/expo.icon/Assets/ticket.svg"
 import { ThemedText } from '@/components/themed-text'
 import { ThemedView } from '@/components/themed-view'
 import { TransformPrice } from '@/constants/formater'
+import CartComponentShimmer from "@/features/cart/components/cart-component-shimmer"
 import useDetailTransactionPage from "@/features/detail_transaction/hooks/use_detail_transaction_page"
 import styles from "@/features/detail_transaction/screen/detail_transaction.styles"
 import { router } from "expo-router"
@@ -66,21 +67,25 @@ export default function DetailTransaction() {
                             backgroundColor: "transparent",
                         }}>
                         {
-                            DetailTransaction.products.map((item) => (
-                                <OrderComponent
-                                    key={item.product.id}
-                                    id={item.product.id.toString()}
-                                    title={item.product.title}
-                                    price={item.product.price}
-                                    description={item.product.description}
-                                    category={item.product.category}
-                                    image={item.product.image}
-                                    rating={item.product.rating}
-                                    quantity={item.quantity}
-                                    onIncrease={() => true}
-                                    onDecrease={() => true}
-                                />
-                            ))
+                            DetailTransaction ?
+                                DetailTransaction.products.map((item) => (
+                                    <OrderComponent
+                                        key={item.product.id + Math.random()}
+                                        id={item.product.id.toString()}
+                                        title={item.product.title}
+                                        price={item.product.price}
+                                        description={item.product.description}
+                                        category={item.product.category}
+                                        image={item.product.image}
+                                        rating={item.product.rating}
+                                        quantity={item.quantity}
+                                        onIncrease={() => true}
+                                        onDecrease={() => true} onDelete={function (id: string): void {
+                                            throw new Error("Function not implemented.")
+                                        }} deleteLoading={false} />
+                                )) : Array.from({ length: 3 }).map((_, index) => (
+                                    <CartComponentShimmer key={index} />
+                                ))
                         }
                     </ThemedView>
                 </ScrollView>

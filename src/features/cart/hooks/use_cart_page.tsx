@@ -1,4 +1,4 @@
-import { CheckoutCart, GetCart, batchDeleteCart, batchUpdateCart } from "@/data/repositories/firestore.repository";
+import { CheckoutCart, GetCart, batchDeleteCart, batchUpdateCart, deleteSingleCart } from "@/data/repositories/firestore.repository";
 import { ProductCartEntities } from "@/domain/entities/product_entities";
 import { useAuthStore } from "@/stores/authStore";
 import { useCartStore } from "@/stores/cartStore";
@@ -10,6 +10,8 @@ import { formatCurrency } from "react-native-format-currency";
 function useCartPage() {
 
     const [Loading, setLoading] = useState<boolean>(false);
+    const [InitialLoading, setInitialLoading] = useState<boolean>(false);
+    const [DeleteLoading, setDeleteLoading] = useState<boolean>(false);
     const [CartList, setCartList] = useState<ProductCartEntities[]>([]);
     const [selectMode, setSelectMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -38,8 +40,10 @@ function useCartPage() {
     };
 
     const fetchCart = async (uid: string) => {
+        setInitialLoading(true);
         const data = await GetCart(uid);
         setCartList(data);
+        setInitialLoading(false);
     };
 
     const handleCheckout = async () => {
@@ -80,10 +84,23 @@ function useCartPage() {
         }
     };
 
+    const handleDeleteSingle = async (id: string) => {
+
+        setDeleteLoading(true);
+
+        if (!Uid) return;
+        console.log("Clicked!");
+
+        await deleteSingleCart(id);
+        await fetchCart(Uid);
+
+        setDeleteLoading(false);
+    }
+
     const handleDeleteSelected = async () => {
         if (!Uid || selectedIds.size === 0) return;
 
-        setLoading(true);
+        setDeleteLoading(true);
 
         const ids = Array.from(selectedIds);
         await batchDeleteCart(ids);
@@ -92,7 +109,7 @@ function useCartPage() {
         setSelectMode(false);
         await fetchCart(Uid);
 
-        setLoading(false);
+        setDeleteLoading(false);
     };
 
     const syncToFirestore = useMemo(
@@ -150,8 +167,10 @@ function useCartPage() {
         if (!item) return;
 
         if (item.quantity <= 1) {
+            setDeleteLoading(true);
             queueUpdate(cartId, 0);
             setCartList((prev) => prev.filter((i) => i.id !== cartId));
+            setDeleteLoading(false);
             return;
         }
 
@@ -183,6 +202,9 @@ function useCartPage() {
         handleSelectAll,
         handleDeleteSelected,
         Loading,
+        handleDeleteSingle,
+        InitialLoading,
+        DeleteLoading
     }
 }
 

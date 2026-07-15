@@ -1,17 +1,16 @@
-import { Stack } from "expo-router"
+import BottomTabBar from "@/components/bottom-tab-bar";
+import { Tabs } from "expo-router";
 
 export default function MainLayout() {
     return (
-        <Stack screenOptions={{
-            headerShown: true
-        }} >
-            <Stack.Screen name="home" options={{ headerShown: false }} />
-            <Stack.Screen name="cart" options={{ headerShown: false }} />
-            <Stack.Screen name="detail" options={{ headerShown: false }} />
-            <Stack.Screen name="transaction" options={{ headerShown: false }} />
-            <Stack.Screen name="detail_transaction" options={{ headerShown: false }} />
-            <Stack.Screen name="all_product" options={{ headerShown: false }} />
-        </Stack>
-    )
+        <>
+            <Tabs
+                tabBar={(props) => <BottomTabBar {...(props as any)} />}
+                screenOptions={{ headerShown: false }}
+                backBehavior="history"
+            >
+                <Tabs.Screen name="home" />
+            </Tabs>
+        </>
+    );
 }
-
